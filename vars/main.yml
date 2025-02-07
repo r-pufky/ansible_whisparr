@@ -1,0 +1,68 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Whisparr Role Options
+###############################################################################
+# Base version used for current role creation. Whisparr will auto update once
+# properly installed; revisiting role tasks is not necessary unless a major
+# version is released. Additional configuration settings may need to be added
+# to defaults for point releases.
+#
+# Whisparr uses the generic Servarr installation scripts.
+#
+# Reference:
+# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+# * https://github.com/Whisparr/Whisparr/releases
+
+# Last time Whisparr options were validated against a default configuration.
+whisparr_role_validate_date: '2025-02-05'
+whisparr_role_validate_release: 'bookworm'
+whisparr_role_validate_version: 'v2.0.0.787'
+whisparr_role_validate_script_release: '3.0.12'
+whisparr_role_validate_script_date: '2024-04-09'
+
+###############################################################################
+# APT Packages
+###############################################################################
+
+whisparr_role_packages:
+  - 'sqlite3'  # Whisparr DB.
+  - 'gnupg2'  # GPG for certificates.
+  - 'ca-certificates'  # up to date certificates for certificate validation.
+  - 'libicu72'  # International Unicode support for .NET.
+
+###############################################################################
+# Whisparr GitHub Options
+###############################################################################
+# Reference:
+# * https://github.com/Whisparr/Whisparr/releases/latest
+
+whisparr_role_github_owner: 'Whisparr'
+whisparr_role_github_repo: 'Whisparr'
+whisparr_role_github_repo_archive_type: 'tar.gz'
+whisparr_role_github_extract_dest: '/opt/whisparr'
+whisparr_role_github_extract_symlink_target: '/opt/whisparr/whisparr'
+# TODO(role): enable when fully released.
+# whisparr_role_github_binary_specifier: 'v'
+# whisparr_role_github_binary_url: '{VERSION}/Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
+
+###############################################################################
+# Default Whisparr User/Group
+###############################################################################
+
+whisparr_role_group:
+  name: 'media'
+  gid: 5555
+
+whisparr_role_user:
+  name: 'media'
+  group: 'media'
+  uid: 5555
+  shell: '/usr/sbin/nologin'
+  home: '/nonexistent'
+  create_home: false
+  password: '!'
+  password_lock: true
+  update_password: 'always'
+  expires: -1
+  system: true

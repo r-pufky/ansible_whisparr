@@ -1,0 +1,10 @@
+---
+###############################################################################
+# Whisparr Handlers
+###############################################################################
+
+- name: 'Handlers | restart whisparr'
+  ansible.builtin.systemd:
+    name: 'whisparr'
+    enabled: true
+    state: 'restarted'

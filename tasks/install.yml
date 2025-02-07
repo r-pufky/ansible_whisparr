@@ -1,0 +1,56 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Whisparr Install
+###############################################################################
+# After release, revert back to standard *arr services, like sonarr or radarr.
+#
+# Inject nightly tarball build and run github role with the archive
+# pre-existing; this will install the build without requiring a manual
+# download and build. Use the pre-compiled binary URL from the installation
+# script.
+#
+# Args:
+#   _whisparr_archive: str - path to local archive.
+#   _whisparr_target: str - whisparr target version.
+#
+# Reference:
+# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+
+- name: 'Install | packages'
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.apt'
+  vars:
+    apt_packages:
+      - '{{ whisparr_role_packages }}'
+    apt_package_update_cache: true
+
+- name: 'Install | patch nightly binary (until released)'
+  ansible.builtin.include_tasks: 'nightly_binary.yml'
+
+- name: 'Install | Whisparr package {{ whisparr_service_version }}'
+  when: not whisparr_service_force_config_only_enable
+  ansible.builtin.include_role:
+    name: 'r_pufky.srv.github'
+  vars:
+    github_testing_enable: true
+    github_testing_version: '{{ _whisparr_target }}'
+    github_repo_owner: '{{ whisparr_role_github_owner }}'
+    github_repo_repo: '{{ whisparr_role_github_repo }}'
+    github_repo_release: '{{ _whisparr_target }}'
+    github_repo_archive_type: '{{ whisparr_role_github_repo_archive_type }}'
+    github_file_owner: '{{ whisparr_user }}'
+    github_file_group: '{{ whisparr_group }}'
+    github_extract_dest: '{{ whisparr_role_github_extract_dest }}'
+    github_extract_symlink_target: '{{ whisparr_role_github_extract_symlink_target }}'
+    github_extract_migrate_files:
+      - 'whisparr.db'
+      - 'whisparr.db-shm'  # Whisparr never closes DB's correctly.
+      - 'whisparr.db-wal'
+      - 'logs.db'
+      - 'logs.db-shm'
+      - 'logs.db-wal'
+    github_extract_delete_old_versions: '{{ whisparr_service_delete_old_versions_enable }}'
+    github_force_overwrite: '{{ whisparr_service_force_overwrite }}'
+    github_extract_mode: 'a-st,o-rwx'
+    github_extract_extra_opts: '--strip-components=1'

@@ -1,0 +1,121 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Whisparr Role Configuration
+###############################################################################
+
+# Version.
+#
+# Older versions (<5) are not supported.
+#
+# Values:
+#   {VERSION}: tagged release to use ('v5.18.4.9674').
+#    'latest': use latest stable release.
+#
+# Default: 'latest'.
+whisparr_service_version: 'latest'
+
+# Remove old installs on upgrade success? Default: True.
+whisparr_service_delete_old_versions_enable: true
+
+# Absolute path to database and metadata location. Default: '/var/lib/whisparr'.
+whisparr_service_data_dir: '/var/lib/whisparr'
+
+# Service Umask. Default: '0002'.
+whisparr_service_u_mask: '0002'
+
+# Force overwrite existing install?
+#
+# DATA DESTRUCTIVE.
+#
+# Removes existing cached downloaded archives and existing same-version install
+# directories (if any). Any user data in these directories are DESTROYED.
+#
+# Default: False.
+whisparr_service_force_overwrite: false
+
+# Automatically restart Whisparr daily?
+#
+# Restarting the Whisparr service will automatically apply any downloaded auto
+# updates.
+#
+# Default: True.
+whisparr_service_restart_daily_enable: true
+
+# Only apply configuration?
+#
+# Reduces role application time by ONLY applying configuration changes. Does
+# NOT affect whisparr_media_set_perms_file_enable.
+#
+# This should ONLY be used after the role has been fully run once.
+#
+# Useful when adding a change without reconfiguring the whole system or
+# checking and installing a new version. Suggest applying with extra options:
+#
+#   ansible-playbook site.yml --tags Whisparr -e 'whisparr_service_force_config_only_enable=true'
+#
+# Default: False.
+whisparr_service_force_config_only_enable: false
+
+###############################################################################
+# Whisparr User
+###############################################################################
+
+# User that Whisparr will run under.
+#
+# Enable whisparr_create_user if this account is not externally managed.
+#
+# Default: 'media'.
+whisparr_user: 'media'
+
+# Group that Whisparr will run under.
+#
+# Enable whisparr_create_user if this group is not externally managed.
+#
+# Default: 'media'.
+whisparr_group: 'media'
+
+# Create whisparr_user, whisparr_group if not detected?
+#
+# Applied via r_pufky.srv.users, see vars/main.yml for default user attributes.
+#
+# Default: True.
+whisparr_create_user: true
+
+###############################################################################
+# Media Permissions
+###############################################################################
+
+# Root media storage folders.
+#
+# Folders will be created/set with whisparr_user, whisparr_group,
+# whisparr_media_perms_folder.
+#
+# Default: [].
+whisparr_media_root_folders: []
+
+# Media folder permissions octal.
+#
+# Media folders specified by whisparr_media_root_folders will always be
+# recursively set using whisparr_media_perms_folder, whisparr_user, and
+# whisparr_group.
+#
+# Default: '0755'.
+whisparr_media_perms_folder: '0755'
+
+# Enable setting of media file permissions?
+#
+# Set file permissions within whisparr_media_root_folders using
+# whisparr_media_perms_file, whisparr_user, and whisparr_group. Large sets of files
+# may be slow to set permissions.
+#
+# Useful when first configuring to ensure service has access to all specified
+# media locations. Suggest applying with extra options:
+#
+#   ansible-playbook site.yml --tags Whisparr -e 'whisparr_media_set_perms_file_enable=true'
+#
+# Default: False.
+whisparr_media_set_perms_file_enable: false
+
+# Media file permissions octal. Default: '0644'.
+whisparr_media_perms_file: '0644'

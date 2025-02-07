@@ -1,0 +1,93 @@
+---
+# yamllint disable rule:line-length
+- name: 'Enable SSL | verify'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Enable SSL | verify | gather service status'
+      ansible.builtin.service_facts:
+
+    # Whisparr will fail if configuration is bad (r_pufky.srv.systemd)
+    - name: 'Enable SSL | verify | assert whisparr.service active'
+      ansible.builtin.assert:
+        that:
+          - '"whisparr.service" in ansible_facts.services'
+          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'
+        fail_msg: 'whisparr.service should be enabled and running.'
+
+- name: 'Enable SSL | verify | SSL enabled'
+  hosts: 'whisparr-debian-12-enable_ssl'
+  gather_facts: false
+  tasks:
+    - name: 'Enable SSL | verify | SSL enabled | query config.xml'
+      ansible.builtin.copy:
+        src: 'files/config_ssl.xml'
+        dest: '/var/lib/whisparr/config.xml'
+        owner: 'media'
+        group: 'media'
+        mode: '0600'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_config_xml
+
+    - name: 'Enable SSL | verify | SSL enabled | assert config.xml'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_config_xml.changed
+        fail_msg: >
+          /var/lib/whisparr/config.xml is not in expected format:
+          {{ _test_whisparr_config_xml.diff }}.
+
+    - name: 'Enable SSL | verify | SSL enabled | query /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.file:
+        path: '/var/lib/whisparr/whisparr.pfx'
+        owner: 'media'
+        group: 'media'
+        mode: '0640'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_pfx
+
+    - name: 'Enable SSL | verify | SSL enabled | assert /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_pfx.changed
+        fail_msg: >
+          /var/lib/whisparr/whisparr.pfx should exist with 0640 media:media
+          {{ _test_whisparr_pfx.diff }}
+
+- name: 'Enable SSL | verify | SSL toggled'
+  hosts: 'whisparr-debian-12-enable_ssl-toggle'
+  gather_facts: false
+  tasks:
+    - name: 'Enable SSL | verify | SSL toggled | query config.xml'
+      ansible.builtin.copy:
+        src: 'files/config_toggle.xml'
+        dest: '/var/lib/whisparr/config.xml'
+        owner: 'media'
+        group: 'media'
+        mode: '0600'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_config_xml
+
+    - name: 'Enable SSL | verify | SSL toggled | assert config.xml'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_config_xml.changed
+        fail_msg: >
+          /var/lib/whisparr/config.xml is not in expected format:
+          {{ _test_whisparr_config_xml.diff }}.
+
+    - name: 'Enable SSL | verify | SSL toggled | query /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.file:
+        path: '/var/lib/whisparr/whisparr.pfx'
+        state: 'absent'
+      check_mode: true
+      register: _test_whisparr_pfx
+
+    - name: 'Enable SSL | verify | SSL toggled | assert /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_pfx.changed
+        fail_msg: '/var/lib/whisparr/whisparr.pfx should not exist.'

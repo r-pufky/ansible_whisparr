@@ -1,0 +1,5 @@
+<Config>
+{% for key, value in _whisparr_config.items() %}
+  <{{ key }}>{{ value }}</{{ key}}>
+{% endfor %}
+</Config>

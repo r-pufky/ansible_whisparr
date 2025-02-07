@@ -1,0 +1,21 @@
+<Config>
+  <BindAddress>*</BindAddress>
+  <Port>6969</Port>
+  <UrlBase></UrlBase>
+  <InstanceName>Whisparr</InstanceName>
+  <EnableSsl>False</EnableSsl>
+  <SslPort>8008</SslPort>
+  <SslCertPath></SslCertPath>
+  <SslCertPassword></SslCertPassword>
+  <AuthenticationMethod>Forms</AuthenticationMethod>
+  <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>
+  <ApiKey>abcdef1234567890abcdef1234567890</ApiKey>
+  <LogLevel>info</LogLevel>
+  <AnalyticsEnabled>False</AnalyticsEnabled>
+  <Branch>nightly</Branch>
+  <UpdateAutomatically>False</UpdateAutomatically>
+  <UpdateMechanism>Script</UpdateMechanism>
+  <UpdateScriptPath>/var/lib/whisparr/update_script</UpdateScriptPath>
+  <LaunchBrowser>False</LaunchBrowser>
+  <Theme>auto</Theme>
+</Config>

@@ -1,0 +1,15 @@
+---
+# yamllint disable rule:line-length
+###############################################################################
+# Ports Configuration
+###############################################################################
+# Manage firewall with r_pufky.srv.ufw.
+#
+# Reference:
+# * https://github.com/r-pufky/ansible_ufw
+
+whisparr_ports:
+  - {proto: 'tcp', from_ip: 'any', to_port: 6969, direction: 'in', comment: 'Whisparr http'}
+  - {proto: 'tcp', from_ip: '127.0.0.1', to_port: 6969, direction: 'in', comment: 'Whisparr http api'}
+  - {proto: 'tcp', from_ip: 'any', to_port: 8008, direction: 'in', comment: 'Whisparr https'}
+  - {proto: 'tcp', from_ip: '127.0.0.1', to_port: 8008, direction: 'in', comment: 'Whisparr https api'}

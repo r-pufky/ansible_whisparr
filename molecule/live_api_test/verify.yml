@@ -1,0 +1,97 @@
+---
+# yamllint disable rule:line-length
+- name: 'Live API test | verify'
+  hosts: 'all'
+  gather_facts: false
+  tasks:
+    - name: 'Live API test | verify | gather service status'
+      ansible.builtin.service_facts:
+
+    - name: 'Live API test | verify | query config.xml'
+      ansible.builtin.copy:
+        src: 'files/config.xml'
+        dest: '/var/lib/whisparr/config.xml'
+        owner: 'media'
+        group: 'media'
+        mode: '0600'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_config_xml
+
+    - name: 'Live API test | verify | assert config.xml'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_config_xml.changed
+        fail_msg: >
+          /var/lib/whisparr/config.xml is not in expected format:
+          {{ _test_whisparr_config_xml.diff }}.
+
+    # Whisparr will fail if configuration is bad (r_pufky.srv.systemd)
+    - name: 'Live API test | verify | assert whisparr.service active'
+      ansible.builtin.assert:
+        that:
+          - '"whisparr.service" in ansible_facts.services'
+          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'
+        fail_msg: 'whisparr.service should be enabled and running.'
+
+    - name: 'Live API test | verify | query /var/lib/whisparr'
+      ansible.builtin.file:
+        path: '/var/lib/whisparr'
+        owner: 'media'
+        group: 'media'
+        mode: '0775'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_var_lib
+
+    - name: 'Live API test | verify | assert /var/lib/whisparr'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_var_lib.changed
+        fail_msg: >
+          /var/lib/whisparr should exist as 0775 media:media
+          ({{ _test_whisparr_var_lib.diff }}).
+
+    - name: 'Live API test | verify | query /var/lib/whisparr/update_script'
+      ansible.builtin.file:
+        path: '/var/lib/whisparr/update_script'
+        state: 'absent'
+      check_mode: true
+      register: _test_whisparr_update
+
+    - name: 'Live API test | verify | assert /var/lib/whisparr/update_script'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_update.changed
+        fail_msg: '/var/lib/whisparr/update_script should not exist.'
+
+    - name: 'Live API test | verify | query /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.file:
+        path: '/var/lib/whisparr/whisparr.pfx'
+        state: 'absent'
+      check_mode: true
+      register: _test_whisparr_pfx
+
+    - name: 'Live API test | verify | assert /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_pfx.changed
+        fail_msg: '/var/lib/whisparr/whisparr.pfx should not exist.'
+
+    - name: 'Live API test | verify | query /data/media'
+      ansible.builtin.file:
+        path: '/data/media'
+        owner: 'media'
+        group: 'media'
+        mode: '0755'
+      check_mode: true
+      diff: true
+      register: _test_whisparr_data_media
+
+    - name: 'Live API test | verify | assert /data/media'
+      ansible.builtin.assert:
+        that:
+          - not _test_whisparr_data_media.changed
+        fail_msg: >
+          /data/media should exist as 0755 media:media
+          ({{ _test_whisparr_data_media.diff }}).

@@ -1,7 +1,7 @@
 ---
 # yamllint disable rule:line-length
 ###############################################################################
-# Whisparr Role Configuration
+# Whisparr Service Configuration
 ###############################################################################
 
 # Version.

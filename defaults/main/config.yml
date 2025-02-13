@@ -41,7 +41,7 @@ whisparr_config_enable_ssl: false
 # HTTPS port. Default: 8008.
 whisparr_config_ssl_port: 8008
 
-# Absolute path to PFX certificate.
+# Path to PFX certificate.
 #
 # Sourced from ansible controller; automatically placed in
 # whisparr_service_data_dir/whisparr.pfx with correct permissions. Whisparr will be

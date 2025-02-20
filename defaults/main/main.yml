@@ -3,6 +3,8 @@
 ###############################################################################
 # Whisparr Service Configuration
 ###############################################################################
+# Existing databases are migrated automatically when new versions are
+# installed.
 
 # Version.
 #
@@ -33,6 +35,22 @@ whisparr_service_u_mask: '0002'
 #
 # Default: False.
 whisparr_service_force_overwrite: false
+
+# Migrate metadata (MediaCover) directory?
+#
+# Multi-GB. Safe to delete but will cause large metadata downloads on new
+# version if not migrated with databases.
+#
+# Default: True.
+whisparr_service_migrate_metadata: true
+
+# Recursively set metadata permissions?
+#
+# Whisparr installations with large media and metadata caches will be
+# excessively slow.
+#
+# Default: False.
+whisparr_service_permissions_recursive_enable: false
 
 # Automatically restart Whisparr daily?
 #

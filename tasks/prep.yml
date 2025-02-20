@@ -9,6 +9,7 @@
 # Generates:
 #   _whisparr_uid: int - whisparr user UID.
 #   _whisparr_gid: int - whisparr user GID.
+#   _whisparr_migrate_metadata: list of str - files and directories to migrate.
 #
 # Reference:
 # * https://whisparr.video/
@@ -73,6 +74,8 @@
       SslPort: '{{ whisparr_config_ssl_port | default(8008) }}',
       SslCertPath: '{{ "{{ whisparr_service_data_dir }}/whisparr.pfx" if whisparr_config_enable_ssl | default(false) else "" }}',  # static placement; var determines controller source.
       SslCertPassword: '{{ whisparr_config_ssl_cert_password | default("") }}',
+      # TODO(V4): whisparr_config_authentication_method switches from 'none' to
+      #     'eternal' on V4 codebase sync.
       AuthenticationMethod: '{{ whisparr_config_authentication_method | default("Forms") | capitalize }}',
       AuthenticationRequired: '{{ "Enabled" if whisparr_config_authentication_required | default(false) else "DisabledForLocalAddresses" }}',
       ApiKey: '{{ whisparr_config_api_key | default(inventory_hostname | md5 | truncate(32, true, "")) }}',
@@ -88,6 +91,7 @@
       # Settings > UI > Style
       Theme: '{{ whisparr_config_theme | default("auto") | lower }}',
     }
+    _whisparr_migrate_metadata: '{{ whisparr_role_github_extract_migrate_files if not whisparr_service_migrate_metadata else whisparr_role_github_extract_migrate_files + ["MediaCover"] }}'
 
 - name: 'Prep | add config extensions'
   when: whisparr_config_extensions | length > 0

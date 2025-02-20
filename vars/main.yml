@@ -45,6 +45,13 @@ whisparr_role_github_extract_symlink_target: '/opt/whisparr/whisparr'
 # TODO(role): enable when fully released.
 # whisparr_role_github_binary_specifier: 'v'
 # whisparr_role_github_binary_url: '{VERSION}/Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
+whisparr_role_github_extract_migrate_files:
+  - 'whisparr2.db'
+  - 'whisparr2.db-shm'  # Whisparr never closes DB's correctly.
+  - 'whisparr2.db-wal'
+  - 'logs.db'
+  - 'logs.db-shm'
+  - 'logs.db-wal'
 
 ###############################################################################
 # Default Whisparr User/Group

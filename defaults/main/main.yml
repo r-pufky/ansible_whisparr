@@ -11,8 +11,8 @@
 # Older versions (<5) are not supported.
 #
 # Values:
-#   {VERSION}: tagged release to use ('v5.18.4.9674').
-#    'latest': use latest stable release.
+#   {VERSION}: Tagged release to use ('v5.18.4.9674').
+#      latest: Use latest stable release.
 #
 # Default: 'latest'.
 whisparr_service_version: 'latest'

@@ -8,20 +8,3 @@
       ansible.builtin.apt:
         name: 'rsync'
         state: 'present'
-
-    # TODO(role): remove when properly released. Inject archive so roles/github
-    #     skips download, as repository has no releases.
-    - name: 'Enable SSL | prepare | inject downloaded archive'
-      ansible.posix.synchronize:
-        src: '{{ whisparr_testing_archive }}'
-        dest: '/tmp/Whisparr-{{ github_testing_version }}.tar.gz'
-        archive: false
-        checksum: true
-
-    - name: 'Enable SSL | prepare | inject archive permissions'
-      ansible.builtin.file:
-        path: '/tmp/Whisparr-{{ github_testing_version }}.tar.gz'
-        owner: 5555
-        group: 5555
-        mode: 'a-st,o-rwx'
-        state: 'file'

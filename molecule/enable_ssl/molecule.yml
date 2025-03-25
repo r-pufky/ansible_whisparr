@@ -42,8 +42,12 @@ provisioner:
         whisparr_media_root_folders: ['/data/media']
         whisparr_config_api_key: 'abcdef1234567890abcdef1234567890'
         github_testing_enable: true
-        github_testing_version: '{{ now(utc=true, fmt="%Y-%m-%d") }}'
-        whisparr_testing_archive: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+        github_testing_versions:
+          - '2.0.0.787'
+          - '2.0.0.787'
+        github_testing_archives:
+          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
 platforms:
   - name: 'whisparr-debian-12-enable_ssl'
     image: 'ghcr.io/hifis-net/debian-systemd:12'

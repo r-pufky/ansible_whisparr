@@ -3,12 +3,16 @@
 ###############################################################################
 # Whisparr Install
 ###############################################################################
-# After release, revert back to standard *arr services, like sonarr or radarr.
+# Whisparr does not have any 'release' versions, only current head. Instead,
+# just install whisparr if the install location does not exist. After release,
+# revert back to standard *arr services, like sonarr or radarr.
 #
-# Inject nightly tarball build and run github role with the archive
-# pre-existing; this will install the build without requiring a manual
-# download and build. Use the pre-compiled binary URL from the installation
-# script.
+# Use static URL to download binary release to install the build without
+# requiring a manual download and build. Use the pre-compiled binary URL from
+# the installation script.
+#
+# TODO(role): Remove this and revert to standard *arr (sonarr, radarr) process
+#     when release happens.
 #
 # Args:
 #   _whisparr_archive: str - path to local archive.
@@ -26,19 +30,24 @@
       - '{{ whisparr_role_packages }}'
     apt_package_update_cache: true
 
-- name: 'Install | patch nightly binary (until released)'
-  ansible.builtin.include_tasks: 'nightly_binary.yml'
+- name: 'Install | check install (until a release version happens)'
+  ansible.builtin.stat:
+    path: '{{ whisparr_role_github_extract_symlink_target }}'
+  register: _whisparr_installed
 
 - name: 'Install | Whisparr package {{ whisparr_service_version }}'
-  when: not whisparr_service_force_config_only_enable
+  when: >
+    not _whisparr_installed.stat.exists and
+    not whisparr_service_force_config_only_enable
   ansible.builtin.include_role:
     name: 'r_pufky.srv.github'
   vars:
-    github_testing_enable: true
-    github_testing_version: '{{ _whisparr_target }}'
+    # TODO(role): revert to *arr standard when released.
+    github_binary_enable: true
+    github_binary_static_url: '{{ whisparr_role_github_binary_static_url }}'
     github_repo_owner: '{{ whisparr_role_github_owner }}'
     github_repo_repo: '{{ whisparr_role_github_repo }}'
-    github_repo_release: '{{ _whisparr_target }}'
+    # github_repo_release: '{{ whisparr_role_github_repo_release }}'
     github_repo_archive_type: '{{ whisparr_role_github_repo_archive_type }}'
     github_file_owner: '{{ whisparr_user }}'
     github_file_group: '{{ whisparr_group }}'

@@ -25,7 +25,7 @@
 
 - name: 'Nightly binary | set version'
   ansible.builtin.set_fact:
-    _whisparr_target: '{{ now(utc=true, fmt="%Y-%m-%d") }}'
+    _whisparr_target: '{{ now(utc=true, fmt="%Y%m%d") }}'
 
 - name: 'Nightly binary | generate locations'
   ansible.builtin.set_fact:

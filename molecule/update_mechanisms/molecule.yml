@@ -27,8 +27,8 @@ provisioner:
           - '2.0.0.787'
           - '2.0.0.787'
         github_testing_archives:
-          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
-          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/files/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
 platforms:
   - name: 'whisparr-debian-12-update_mechanisms'
     image: 'ghcr.io/hifis-net/debian-systemd:12'

@@ -20,6 +20,7 @@
 
     - name: 'Default | verify | assert config.xml'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_whisparr_config_xml.changed
         fail_msg: >
@@ -29,6 +30,7 @@
     # Whisparr will fail if configuration is bad (r_pufky.srv.systemd)
     - name: 'Default | verify | assert whisparr.service active'
       ansible.builtin.assert:
+        quiet: true
         that:
           - '"whisparr.service" in ansible_facts.services'
           - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'
@@ -46,6 +48,7 @@
 
     - name: 'Default | verify | assert /var/lib/whisparr'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_whisparr_var_lib.changed
         fail_msg: >
@@ -61,6 +64,7 @@
 
     - name: 'Default | verify | assert /var/lib/whisparr/update_script'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_whisparr_update.changed
         fail_msg: '/var/lib/whisparr/update_script should not exist.'
@@ -74,6 +78,7 @@
 
     - name: 'Default | verify | assert /var/lib/whisparr/whisparr.pfx'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_whisparr_pfx.changed
         fail_msg: '/var/lib/whisparr/whisparr.pfx should not exist.'
@@ -90,6 +95,7 @@
 
     - name: 'Default | verify | assert /data/media'
       ansible.builtin.assert:
+        quiet: true
         that:
           - not _test_whisparr_data_media.changed
         fail_msg: >

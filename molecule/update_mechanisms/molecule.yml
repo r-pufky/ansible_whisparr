@@ -22,13 +22,14 @@ provisioner:
         whisparr_config_update_script_path: 'files/update.sh'
         whisparr_media_root_folders: ['/data/media']
         whisparr_config_api_key: 'abcdef1234567890abcdef1234567890'
-        github_testing_enable: true
-        github_testing_versions:
-          - '2.0.0.787'
-          - '2.0.0.787'
-        github_testing_archives:
-          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
-          - '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+        repo_testing_enable: true
+        repo_testing_versions:
+          - comment: 'default'
+            version: '2.0.0.787'
+            asset: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+          - comment: 'toggle'
+            version: '2.0.0.787'
+            asset: '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
 platforms:
   - name: 'whisparr-debian-12-update_mechanisms'
     image: 'ghcr.io/hifis-net/debian-systemd:12'

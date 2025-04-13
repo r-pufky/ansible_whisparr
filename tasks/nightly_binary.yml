@@ -29,7 +29,7 @@
 
 - name: 'Nightly binary | generate locations'
   ansible.builtin.set_fact:
-    _whisparr_archive: '/tmp/{{ whisparr_role_github_repo }}-{{ _whisparr_target }}.{{ whisparr_role_github_repo_archive_type }}'
+    _whisparr_archive: '/tmp/{{ whisparr_role_repo_release_repo }}-{{ _whisparr_target }}.{{ whisparr_role_repo_release_repo_archive_type }}'
     _whisparr_target_url: 'https://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
 
 - name: 'Prep | check archive location'
@@ -37,7 +37,7 @@
     path: '{{ _whisparr_archive }}'
   register: _whisparr_archive_stat
 
-- name: 'Install | {{ whisparr_role_github_repo }} {{ _whisparr_target }}'  # noqa name[template] show full repo version
+- name: 'Install | {{ whisparr_role_repo_release_repo }} {{ _whisparr_target }}'  # noqa name[template] show full repo version
   when: not _whisparr_archive_stat.stat.exists
   ansible.builtin.get_url:
     url: '{{ _whisparr_target_url }}'

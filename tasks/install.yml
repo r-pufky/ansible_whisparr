@@ -32,7 +32,7 @@
 
 - name: 'Install | check install (until a release version happens)'
   ansible.builtin.stat:
-    path: '{{ whisparr_role_github_extract_symlink_target }}'
+    path: '{{ whisparr_role_repo_extract_symlink_target }}'
   register: _whisparr_installed
 
 - name: 'Install | Whisparr package {{ whisparr_service_version }}'
@@ -40,21 +40,20 @@
     not _whisparr_installed.stat.exists and
     not whisparr_service_force_config_only_enable
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.github'
+    name: 'r_pufky.srv.repo'
   vars:
     # TODO(role): revert to *arr standard when released.
-    github_binary_enable: true
-    github_binary_static_url: '{{ whisparr_role_github_binary_static_url }}'
-    github_repo_owner: '{{ whisparr_role_github_owner }}'
-    github_repo_repo: '{{ whisparr_role_github_repo }}'
-    # github_repo_release: '{{ whisparr_role_github_repo_release }}'
-    github_repo_archive_type: '{{ whisparr_role_github_repo_archive_type }}'
-    github_file_owner: '{{ whisparr_user }}'
-    github_file_group: '{{ whisparr_group }}'
-    github_extract_dest: '{{ whisparr_role_github_extract_dest }}'
-    github_extract_symlink_target: '{{ whisparr_role_github_extract_symlink_target }}'
-    github_extract_migrate_files: '{{ _whisparr_migrate_metadata }}'
-    github_extract_delete_old_versions: '{{ whisparr_service_delete_old_versions_enable }}'
-    github_force_overwrite: '{{ whisparr_service_force_overwrite }}'
-    github_extract_mode: 'a-st,o-rwx'
-    github_extract_extra_opts: '--strip-components=1'
+    repo_release_owner: '{{ whisparr_role_repo_release_owner }}'
+    repo_release_repo: '{{ whisparr_role_repo_release_repo }}'
+    repo_release_tag: '{{ whisparr_service_version }}'
+    repo_release_asset: '{{ whisparr_role_repo_release_asset }}'
+    repo_release_asset_static_url: '{{ whisparr_role_repo_release_asset_static_url }}'
+    repo_file_owner: '{{ whisparr_user }}'
+    repo_file_group: '{{ whisparr_group }}'
+    repo_extract_dir: '{{ whisparr_role_repo_extract_dir }}'
+    repo_extract_symlink_target: '{{ whisparr_role_repo_extract_symlink_target }}'
+    repo_extract_migrate_files: '{{ _whisparr_migrate_metadata }}'
+    repo_extract_delete_old_versions: '{{ whisparr_service_delete_old_versions_enable }}'
+    repo_force_overwrite: '{{ whisparr_service_force_overwrite }}'
+    repo_extract_mode: 'a-st,o-rwx'
+    repo_extract_extra_opts: '--strip-components=1'

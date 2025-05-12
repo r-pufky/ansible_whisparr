@@ -1,6 +1,11 @@
 ---
 # yamllint disable rule:line-length
-# Confirm:
+###############################################################################
+# Default
+###############################################################################
+# Default configuration is deployed successfully.
+#
+# Tests:
 # * config.xml set.
 # * whisparr.service active and running.
 # * /var/lib/whisparr created with correct permissions.
@@ -8,6 +13,7 @@
 # * /data/media - file permissions recursively set with correct permissions.
 # * /var/lib/whisparr/update_script does not exist.
 # * /var/lib/whisparr/whisparr.pfx does not exist.
+
 dependency:
   name: 'galaxy'
 driver:
@@ -38,6 +44,8 @@ platforms:
       - '/sys/fs/cgroup:/sys/fs/cgroup:ro'
     command: '/lib/systemd/systemd'
     pre_build_image: true
+    published_ports:
+      - '6969/tcp'
 verifier:
   name: 'ansible'
 lint: |

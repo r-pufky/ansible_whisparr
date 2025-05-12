@@ -20,79 +20,60 @@
   hosts: 'whisparr-debian-12-enable_ssl'
   gather_facts: false
   tasks:
-    - name: 'Enable SSL | verify | SSL enabled | query config.xml'
-      ansible.builtin.copy:
-        src: 'files/config_ssl.xml'
-        dest: '/var/lib/whisparr/config.xml'
-        owner: 'media'
-        group: 'media'
-        mode: '0600'
-      check_mode: true
-      diff: true
-      register: _test_whisparr_config_xml
+    - name: 'Enable SSL | verify | SSL enabled | config.xml'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: 'Enable SSL | verify | SSL enabled | config.xml'
+        test_src: 'files/config_ssl.xml'
+        test_file: '/var/lib/whisparr/config.xml'
+        test_owner: 'media'
+        test_group: 'media'
+        test_mode: '0600'
 
-    - name: 'Enable SSL | verify | SSL enabled | assert config.xml'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - not _test_whisparr_config_xml.changed
-        fail_msg: >
-          /var/lib/whisparr/config.xml is not in expected format:
-          {{ _test_whisparr_config_xml.diff }}.
-
-    - name: 'Enable SSL | verify | SSL enabled | query /var/lib/whisparr/whisparr.pfx'
-      ansible.builtin.file:
-        path: '/var/lib/whisparr/whisparr.pfx'
-        owner: 'media'
-        group: 'media'
-        mode: '0640'
-      check_mode: true
-      diff: true
-      register: _test_whisparr_pfx
-
-    - name: 'Enable SSL | verify | SSL enabled | assert /var/lib/whisparr/whisparr.pfx'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - not _test_whisparr_pfx.changed
-        fail_msg: >
-          /var/lib/whisparr/whisparr.pfx should exist with 0640 media:media
-          {{ _test_whisparr_pfx.diff }}
+    - name: >-
+        Enable SSL | verify | SSL enabled |
+        /var/lib/whisparr/whisparr.pfx
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.tests'
+        tasks_from: 'file.yml'
+      vars:
+        test_name: >-
+          Enable SSL | verify | SSL enabled |
+          /var/lib/whisparr/whisparr.pfx
+        test_file: '/var/lib/whisparr/whisparr.pfx'
+        test_owner: 'media'
+        test_group: 'media'
+        test_mode: '0640'
+        test_state: 'file'
 
 - name: 'Enable SSL | verify | SSL toggled'
   hosts: 'whisparr-debian-12-enable_ssl-toggle'
   gather_facts: false
   tasks:
-    - name: 'Enable SSL | verify | SSL toggled | query config.xml'
-      ansible.builtin.copy:
-        src: 'files/config_toggle.xml'
-        dest: '/var/lib/whisparr/config.xml'
-        owner: 'media'
-        group: 'media'
-        mode: '0600'
-      check_mode: true
-      diff: true
-      register: _test_whisparr_config_xml
+    - name: 'Enable SSL | verify | SSL toggled | config.xml'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.tests'
+        tasks_from: 'copy.yml'
+      vars:
+        test_name: 'Enable SSL | verify | SSL toggled | config.xml'
+        test_src: 'files/config_toggle.xml'
+        test_file: '/var/lib/whisparr/config.xml'
+        test_owner: 'media'
+        test_group: 'media'
+        test_mode: '0600'
 
-    - name: 'Enable SSL | verify | SSL toggled | assert config.xml'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - not _test_whisparr_config_xml.changed
-        fail_msg: >
-          /var/lib/whisparr/config.xml is not in expected format:
-          {{ _test_whisparr_config_xml.diff }}.
-
-    - name: 'Enable SSL | verify | SSL toggled | query /var/lib/whisparr/whisparr.pfx'
-      ansible.builtin.file:
-        path: '/var/lib/whisparr/whisparr.pfx'
-        state: 'absent'
-      check_mode: true
-      register: _test_whisparr_pfx
-
-    - name: 'Enable SSL | verify | SSL toggled | assert /var/lib/whisparr/whisparr.pfx'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - not _test_whisparr_pfx.changed
-        fail_msg: '/var/lib/whisparr/whisparr.pfx should not exist.'
+    - name: 'Enable SSL | verify | SSL toggled | /var/lib/whisparr/whisparr.pfx'
+      ansible.builtin.include_role:
+        name: 'r_pufky.srv.tests'
+        tasks_from: 'file.yml'
+      vars:
+        test_name: >-
+          Enable SSL | verify | SSL toggled |
+          /var/lib/whisparr/whisparr.pfx
+        test_file: '/var/lib/whisparr/whisparr.pfx'
+        test_owner: '{{ omit }}'
+        test_group: '{{ omit }}'
+        test_mode: '{{ omit }}'
+        test_state: 'absent'

@@ -40,10 +40,12 @@ whisparr_role_packages:
 whisparr_role_repo_release_owner: 'Whisparr'
 whisparr_role_repo_release_repo: 'Whisparr'
 whisparr_role_repo_extract_dir: '/opt/whisparr'
-whisparr_role_repo_extract_symlink_target: '/opt/whisparr/whisparr'
+whisparr_role_repo_extract_symlink: '/opt/whisparr/whisparr'
 whisparr_role_repo_release_specifier: 'v'
-whisparr_role_repo_release_asset: 'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
-# whisparr_role_repo_release_asset: 'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
+whisparr_role_repo_release_asset:
+  'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+# whisparr_role_repo_release_asset:
+#   'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
 whisparr_role_repo_release_asset_static_url: 'https://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
 whisparr_role_repo_extract_migrate_files:
   - 'whisparr2.db'

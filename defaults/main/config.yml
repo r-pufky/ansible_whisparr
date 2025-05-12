@@ -32,7 +32,7 @@ whisparr_config_port: 6969
 # URL base for reverse proxy support. Default: '' (disabled).
 whisparr_config_url_base: ''
 
-# Whisparr application name for browser tab and syslog logs. Default: 'Whisparr'.
+# Whisparr application name for browser tab, syslog logs. Default: 'Whisparr'.
 whisparr_config_instance_name: 'Whisparr'
 
 # Enable SSL? Default: False.
@@ -44,8 +44,8 @@ whisparr_config_ssl_port: 8008
 # Path to PFX certificate.
 #
 # Sourced from ansible controller; automatically placed in
-# whisparr_service_data_dir/whisparr.pfx with correct permissions. Whisparr will be
-# automatically configured to use the installed location.
+# whisparr_service_data_dir/whisparr.pfx with correct permissions. Whisparr
+# will be automatically configured to use the installed location.
 #
 # whisparr_config_ssl_cert_path: 'host_vars/nzb.example.com/data/my_cert.pfx'
 #
@@ -101,7 +101,8 @@ whisparr_config_authentication_required: false
 #   '': random 32 character alphanumeric hash
 #
 # Default: '{RANDOM}' (insecure idempotent API key based on hostname).
-whisparr_config_api_key: '{{ inventory_hostname | md5 | truncate(32, true, "") }}'
+whisparr_config_api_key:
+  '{{ inventory_hostname | md5 | truncate(32, true, "") }}'
 
 ###############################################################################
 # Settings > General > Logging
@@ -182,8 +183,8 @@ whisparr_config_update_mechanism: true
 # the update process.
 #
 # Sourced from ansible controller; automatically placed in
-# whisparr_service_data_dir/update_script with correct permissions. Whisparr will
-# be automatically configured to use the installed location.
+# whisparr_service_data_dir/update_script with correct permissions. Whisparr
+# will be automatically configured to use the installed location.
 #
 # whisparr_config_update_script_path: 'host_vars/nzb.example.com/data/script.sh'
 #

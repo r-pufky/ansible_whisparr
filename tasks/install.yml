@@ -25,7 +25,7 @@
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.apt'
+    name: 'r_pufky.deb.apt'
   vars:
     apt_packages:
       - '{{ whisparr_role_packages }}'
@@ -41,7 +41,7 @@
     not _whisparr_installed.stat.exists and
     not whisparr_service_force_config_only_enable
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.repo'
+    name: 'r_pufky.deb.repo'
   vars:
     # TODO(role): revert to *arr standard when released.
     repo_release_owner: '{{ whisparr_role_repo_release_owner }}'

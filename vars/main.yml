@@ -13,6 +13,7 @@
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # * https://github.com/Whisparr/Whisparr/releases
+# yamllint enable rule:line-length
 
 # Last time Whisparr options were validated against a default configuration.
 whisparr_role_validate_date: '2025-02-05'
@@ -46,7 +47,10 @@ whisparr_role_repo_release_asset:
   'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
 # whisparr_role_repo_release_asset:
 #   'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
-whisparr_role_repo_release_asset_static_url: 'https://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
+whisparr_role_repo_release_asset_static_url: '{{
+    "https://whisparr.servarr.com/v1/update/nightly/" ~
+    "updatefile?os=linux&runtime=netcore&arch=x64"
+  }}'
 whisparr_role_repo_extract_migrate_files:
   - 'whisparr2.db'
   - 'whisparr2.db-shm'  # Whisparr never closes DB's correctly.

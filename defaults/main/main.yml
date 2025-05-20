@@ -9,7 +9,7 @@
 # Version.
 #
 # Older versions (<5) are not supported. Set repo_host_access_token if github
-# API is rate limited. See r_pufky.srv.repo.
+# API is rate limited. See r_pufky.deb.repo.
 #
 # Values:
 #   {VERSION}: Tagged release to use ('v5.18.4.9674').
@@ -98,7 +98,7 @@ whisparr_group: 'media'
 
 # Create whisparr_user, whisparr_group if not detected?
 #
-# Applied via r_pufky.srv.users, see vars/main.yml for default user attributes.
+# Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
 # Default: True.
 whisparr_create_user: true

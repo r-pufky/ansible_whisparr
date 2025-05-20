@@ -19,7 +19,7 @@
 
 - name: 'Config | Whisparr service'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.systemd'
+    name: 'r_pufky.deb.systemd'
   vars:
     systemd_daemon_reload_enable: true
     systemd_services:
@@ -62,7 +62,7 @@
 
 - name: 'Config | set {{ whisparr_service_data_dir }}'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.utils'
+    name: 'r_pufky.lib.utils'
     tasks_from: 'remote_file.yml'
   vars:
     file_path: '{{ whisparr_service_data_dir }}'
@@ -107,7 +107,7 @@
 # Use UID/GID as some media filesystems may be remote.
 - name: 'Config | set media root folders'
   ansible.builtin.include_role:
-    name: 'r_pufky.srv.utils'
+    name: 'r_pufky.lib.utils'
     tasks_from: 'remote_file.yml'
   vars:
     file_path: '{{ item }}'

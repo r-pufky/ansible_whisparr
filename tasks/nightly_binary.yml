@@ -22,6 +22,7 @@
 #
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+# yamllint enable rule:line-length
 
 - name: 'Nightly binary | set version'
   ansible.builtin.set_fact:
@@ -29,16 +30,22 @@
 
 - name: 'Nightly binary | generate locations'
   ansible.builtin.set_fact:
-    _whisparr_archive: '/tmp/{{ whisparr_role_repo_release_repo }}-{{ _whisparr_target }}.{{ whisparr_role_repo_release_repo_archive_type }}'
-    _whisparr_target_url: 'https://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
+    _whisparr_archive: '{{
+        "/tmp/" ~
+        whisparr_role_repo_release_repo ~ "-" ~
+        _whisparr_target ~ "." ~
+        whisparr_role_repo_release_repo_archive_type
+      }}'
+    _whisparr_target_url: '{{ whisparr_role_repo_release_asset_static_url }}'
 
 - name: 'Prep | check archive location'
   ansible.builtin.stat:
     path: '{{ _whisparr_archive }}'
   register: _whisparr_archive_stat
 
-- name: 'Install | {{ whisparr_role_repo_release_repo }} {{ _whisparr_target }}'  # noqa name[template] show full repo version
-  when: not _whisparr_archive_stat.stat.exists
+- name:
+    'Install | {{ whisparr_role_repo_release_repo }} {{ _whisparr_target }}'
+  when: not _whisparr_archive_stat.stat.exists  # noqa name[template] version
   ansible.builtin.get_url:
     url: '{{ _whisparr_target_url }}'
     dest: '{{ _whisparr_archive }}'

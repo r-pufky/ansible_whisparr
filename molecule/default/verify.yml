@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Default | verify'
   hosts: 'all'
   gather_facts: false
@@ -9,7 +8,7 @@
 
     - name: 'Default | verify | config.xml'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
         test_name: 'Default | verify | config.xml'
@@ -19,18 +18,18 @@
         test_group: 'media'
         test_mode: '0600'
 
-    # Whisparr will fail if configuration is bad (r_pufky.srv.systemd)
+    # Whisparr will fail if configuration is bad (r_pufky.deb.systemd)
     - name: 'Default | verify | assert whisparr.service active'
       ansible.builtin.assert:
         quiet: true
         that:
           - '"whisparr.service" in ansible_facts.services'
-          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'
+          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'  # yamllint disable-line rule:line-length
         fail_msg: 'whisparr.service should be enabled and running.'
 
     - name: 'Default | verify | /var/lib/whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: 'Default | verify | /var/lib/whisparr'
@@ -40,33 +39,24 @@
         test_mode: '0775'
         test_state: 'directory'
 
-    - name: 'Default | verify | /var/lib/whisparr/update_script'
+    - name: 'Default | verify | /var/lib/whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
-        test_name: 'Default | verify | /var/lib/whisparr/update_script'
-        test_file: '/var/lib/whisparr/update_script'
+        test_name: 'Default | verify | /var/lib/whisparr/{{ item }}'
+        test_file: '/var/lib/whisparr/{{ item }}'
         test_owner: '{{ omit }}'
         test_group: '{{ omit }}'
         test_mode: '{{ omit }}'
         test_state: 'absent'
-
-    - name: 'Default | verify | /var/lib/whisparr/whisparr.pfx'
-      ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
-        tasks_from: 'file.yml'
-      vars:
-        test_name: 'Default | verify | /var/lib/whisparr/whisparr.pfx'
-        test_file: '/var/lib/whisparr/whisparr.pfx'
-        test_owner: '{{ omit }}'
-        test_group: '{{ omit }}'
-        test_mode: '{{ omit }}'
-        test_state: 'absent'
+      loop:
+        - 'update_script'
+        - 'whisparr.pfx'
 
     - name: 'Default | verify | /data/media'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: 'Default | verify | /data/media'

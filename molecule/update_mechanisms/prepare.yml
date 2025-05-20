@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Update mechanisms | prepare'
   hosts: 127.0.0.1
   connection: local
@@ -11,27 +10,25 @@
           '{{ lookup("env", "MOLECULE_PROJECT_DIRECTORY") }}/molecule/cache'
 
     - name: 'Update mechanisms | prepare | create cache'
-      ansible.builtin.file:
-        path: '{{ _test_cache }}'
-        mode: '0755'
-        state: 'directory'
-
-    - name: 'Update mechanisms | prepare | check 2.0.0.787'
-      ansible.builtin.stat:
-        path:
-          '{{ _test_cache }}/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
-      register: _test_prepare
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'create_cache.yml'
+      vars:
+        test_name: 'Update mechanisms | prepare | create cache'
 
     # TODO(role): change to version when released. Potentially may break.
-    - name: 'Update mechanisms | prepare | cache 2.0.0.787'
-      when: not _test_prepare.stat.exists
-      ansible.builtin.get_url:
-        url: 'https://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
-        dest:
-          '{{ _test_cache }}/Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
-        mode: '0640'
-      retries: 5
-      delay: 5
+    - name: 'Update mechanisms | prepare | check 2.0.0.787'
+      ansible.builtin.include_role:
+        name: 'r_pufky.lib.tests'
+        tasks_from: 'cache_url.yml'
+      vars:
+        test_name: 'Update mechanisms | prepare | cache 2.0.0.787'
+        test_dest: 'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+        test_url: '{{
+            "https://whisparr.servarr.com/v1/update/nightly/" ~
+            "updatefile?os=linux&runtime=netcore&arch=x64"
+          }}'
+        test_mode: '0640'
 
 - name: 'Update mechanisms | prepare'
   hosts: 'all'

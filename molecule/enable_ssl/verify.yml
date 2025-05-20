@@ -1,5 +1,4 @@
 ---
-# yamllint disable rule:line-length
 - name: 'Enable SSL | verify'
   hosts: 'all'
   gather_facts: false
@@ -7,13 +6,13 @@
     - name: 'Enable SSL | verify | gather service status'
       ansible.builtin.service_facts:
 
-    # Whisparr will fail if configuration is bad (r_pufky.srv.systemd)
+    # Whisparr will fail if configuration is bad (r_pufky.deb.systemd)
     - name: 'Enable SSL | verify | assert whisparr.service active'
       ansible.builtin.assert:
         quiet: true
         that:
           - '"whisparr.service" in ansible_facts.services'
-          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'
+          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'  # yamllint disable-line rule:line-length
         fail_msg: 'whisparr.service should be enabled and running.'
 
 - name: 'Enable SSL | verify | SSL enabled'
@@ -22,7 +21,7 @@
   tasks:
     - name: 'Enable SSL | verify | SSL enabled | config.xml'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
         test_name: 'Enable SSL | verify | SSL enabled | config.xml'
@@ -36,7 +35,7 @@
         Enable SSL | verify | SSL enabled |
         /var/lib/whisparr/whisparr.pfx
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-
@@ -54,7 +53,7 @@
   tasks:
     - name: 'Enable SSL | verify | SSL toggled | config.xml'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'copy.yml'
       vars:
         test_name: 'Enable SSL | verify | SSL toggled | config.xml'
@@ -64,9 +63,10 @@
         test_group: 'media'
         test_mode: '0600'
 
-    - name: 'Enable SSL | verify | SSL toggled | /var/lib/whisparr/whisparr.pfx'
+    - name:
+        'Enable SSL | verify | SSL toggled | /var/lib/whisparr/whisparr.pfx'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.tests'
+        name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-

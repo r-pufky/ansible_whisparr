@@ -17,13 +17,13 @@
         test_name: 'Update mechanisms | prepare | create cache'
 
     # TODO(role): change to version when released. Potentially may break.
-    - name: 'Update mechanisms | prepare | check 2.0.0.787'
+    - name: 'Update mechanisms | prepare | check 2.0.0.1112'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'cache_url.yml'
       vars:
-        test_name: 'Update mechanisms | prepare | cache 2.0.0.787'
-        test_dest: 'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+        test_name: 'Update mechanisms | prepare | cache 2.0.0.1112'
+        test_dest: 'Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz'
         test_url: '{{
             "https://whisparr.servarr.com/v1/update/nightly/" ~
             "updatefile?os=linux&runtime=netcore&arch=x64"

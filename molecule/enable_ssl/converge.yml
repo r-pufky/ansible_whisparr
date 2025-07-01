@@ -15,4 +15,4 @@
       ansible.builtin.include_role:
         name: 'r_pufky.srv.whisparr'
       vars:
-        whisparr_config_enable_ssl: false
+        whisparr_cfg_enable_ssl: false

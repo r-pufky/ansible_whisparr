@@ -7,7 +7,7 @@
 # Reference:
 # * https://github.com/r-pufky/ansible_ufw
 
-whisparr_ports:
+whisparr_srv_ports:
   - proto: 'tcp'
     from_ip: 'any'
     to_port: 6969

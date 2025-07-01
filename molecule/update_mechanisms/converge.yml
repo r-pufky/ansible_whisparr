@@ -17,4 +17,4 @@
       ansible.builtin.include_role:
         name: 'r_pufky.srv.whisparr'
       vars:
-        whisparr_config_update_mechanism: true
+        whisparr_cfg_update_mechanism: true

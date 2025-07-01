@@ -36,8 +36,8 @@ provisioner:
   inventory:
     group_vars:
       all:
-        whisparr_media_root_folders: ['/data/media']
-        whisparr_config_api_key: 'abcdef1234567890abcdef1234567890'
+        whisparr_srv_media_root_folders: ['/data/media']
+        whisparr_cfg_api_key: 'abcdef1234567890abcdef1234567890'
         whisparr_live_api_enable: false
 platforms:
   - name: 'whisparr-debian-12-live_api_test'

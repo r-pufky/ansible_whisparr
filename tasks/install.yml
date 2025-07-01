@@ -14,11 +14,6 @@
 # TODO(role): Remove this and revert to standard *arr (sonarr, radarr) process
 #     when release happens.
 #
-# Args:
-#   _whisparr_archive: str - path to local archive.
-#   _whisparr_target: str - whisparr target version.
-#   _whisparr_migrate_metadata: list of str - files and directories to migrate.
-#
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # yamllint enable rule:line-length
@@ -36,27 +31,27 @@
     path: '{{ whisparr_role_repo_extract_symlink }}'
   register: _whisparr_installed
 
-- name: 'Install | Whisparr package {{ whisparr_service_version }}'
+- name: 'Install | Whisparr package {{ _whisparr_srv_version.raw }}'
   when: >
     not _whisparr_installed.stat.exists and
-    not whisparr_service_force_config_only_enable
+    not _whisparr_srv_force_config_only_enable.raw
   ansible.builtin.include_role:
     name: 'r_pufky.deb.repo'
   vars:
     # TODO(role): revert to *arr standard when released.
     repo_release_owner: '{{ whisparr_role_repo_release_owner }}'
     repo_release_repo: '{{ whisparr_role_repo_release_repo }}'
-    repo_release_tag: '{{ whisparr_service_version }}'
+    repo_release_tag: '{{ _whisparr_srv_version.raw }}'
     repo_release_asset: '{{ whisparr_role_repo_release_asset }}'
     repo_release_asset_static_url:
       '{{ whisparr_role_repo_release_asset_static_url }}'
-    repo_file_owner: '{{ whisparr_user }}'
-    repo_file_group: '{{ whisparr_group }}'
+    repo_file_owner: '{{ _whisparr_srv_user.parsed }}'
+    repo_file_group: '{{ _whisparr_srv_group.parsed }}'
     repo_extract_dir: '{{ whisparr_role_repo_extract_dir }}'
     repo_extract_symlink: '{{ whisparr_role_repo_extract_symlink }}'
-    repo_extract_migrate_files: '{{ _whisparr_migrate_metadata }}'
+    repo_extract_migrate_files: '{{ _whisparr_srv_migrate_metadata.role }}'
     repo_extract_delete_old_versions:
-      '{{ whisparr_service_delete_old_versions_enable }}'
-    repo_force_overwrite: '{{ whisparr_service_force_overwrite }}'
+      '{{ _whisparr_srv_delete_old_versions_enable.raw }}'
+    repo_force_overwrite: '{{ _whisparr_srv_force_overwrite.raw }}'
     repo_extract_mode: 'a-st,o-rwx'
     repo_extract_extra_opts: '--strip-components=1'

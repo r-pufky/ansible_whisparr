@@ -1,33 +1,41 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
 # Whisparr Service Configuration
 ###############################################################################
 # Existing databases are migrated automatically when new versions are
-# installed.
-
-# Version.
+# installed. Migration between database platforms is not supported and must be
+# done manually.
 #
-# Older versions (<5) are not supported. Set repo_host_access_token if github
-# API is rate limited. See r_pufky.deb.repo.
+# Set repo_host_access_token if API is rate limited. See r_pufky.deb.repo.
+
+# Whisparr Release.
+#
+# There are currently no 'releases'. Use latest.
+#
+# Versions (Schematic):
+#       MAJOR: Unsafe - requires major role changes; only default MAJOR version
+#              is supported. See other branches if they exist.
+#       MINOR: Unsafe - Unknown.
+#       PATCH: Unsafe - Unknown.
+#   RECOMMEND: Only use 'latest' until an actual release happens.
 #
 # Values:
-#   {VERSION}: Tagged release to use ('v5.18.4.9674').
+#   {VERSION}: Tagged release to use ('v2.0.0.1112').
 #      latest: Use latest stable release.
 #
 # Default: 'latest'.
-whisparr_service_version: 'latest'
+whisparr_srv_version: 'latest'
 
 # Remove old installs on upgrade success? Default: True.
-whisparr_service_delete_old_versions_enable: true
+whisparr_srv_delete_old_versions_enable: true
 
 # Absolute path to database and metadata location.
 #
-# Default: '/var/lib/whisparr'.
-whisparr_service_data_dir: '/var/lib/whisparr'
+# Default: '/data/whisparr/config'.
+whisparr_srv_config_dir: '/data/whisparr/config'
 
 # Service Umask. Default: '0002'.
-whisparr_service_u_mask: '0002'
+whisparr_srv_u_mask: '0002'
 
 # Force overwrite existing install?
 #
@@ -37,7 +45,7 @@ whisparr_service_u_mask: '0002'
 # directories (if any). Any user data in these directories are DESTROYED.
 #
 # Default: False.
-whisparr_service_force_overwrite: false
+whisparr_srv_force_overwrite: false
 
 # Migrate metadata (MediaCover) directory?
 #
@@ -45,7 +53,7 @@ whisparr_service_force_overwrite: false
 # version if not migrated with databases.
 #
 # Default: True.
-whisparr_service_migrate_metadata: true
+whisparr_srv_migrate_metadata: true
 
 # Recursively set metadata permissions?
 #
@@ -53,7 +61,7 @@ whisparr_service_migrate_metadata: true
 # excessively slow.
 #
 # Default: False.
-whisparr_service_permissions_recursive_enable: false
+whisparr_srv_permissions_recursive_enable: false
 
 # Automatically restart Whisparr daily?
 #
@@ -61,7 +69,7 @@ whisparr_service_permissions_recursive_enable: false
 # updates.
 #
 # Default: True.
-whisparr_service_restart_daily_enable: true
+whisparr_srv_restart_daily_enable: true
 
 # Only apply configuration?
 #
@@ -73,10 +81,12 @@ whisparr_service_restart_daily_enable: true
 # Useful when adding a change without reconfiguring the whole system or
 # checking and installing a new version. Suggest applying with extra options:
 #
-#   ansible-playbook site.yml --tags Whisparr -e 'whisparr_service_force_config_only_enable=true'
+#   ansible-playbook site.yml
+#       --tags Whisparr
+#       -e 'whisparr_srv_force_config_only_enable=true'
 #
 # Default: False.
-whisparr_service_force_config_only_enable: false
+whisparr_srv_force_config_only_enable: false
 
 ###############################################################################
 # Whisparr User
@@ -87,16 +97,16 @@ whisparr_service_force_config_only_enable: false
 # Enable whisparr_create_user if this account is not externally managed.
 #
 # Default: 'media'.
-whisparr_user: 'media'
+whisparr_srv_user: 'media'
 
 # Group that Whisparr will run under.
 #
 # Enable whisparr_create_user if this group is not externally managed.
 #
 # Default: 'media'.
-whisparr_group: 'media'
+whisparr_srv_group: 'media'
 
-# Create whisparr_user, whisparr_group if not detected?
+# Create whisparr_srv_user, whisparr_srv_group if not detected?
 #
 # Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
@@ -109,17 +119,31 @@ whisparr_create_user: true
 
 # Root media storage folders.
 #
-# Folders will be created/set with whisparr_user, whisparr_group,
+# Folders will be created/set with whisparr_srv_user, whisparr_srv_group,
 # whisparr_media_perms_folder.
 #
 # Default: [].
 whisparr_media_root_folders: []
 
+# Enable user management of data/media files?
+#
+# Use whisparr_srv_user to execute data/media management commands. Role
+# applies media permissions using 'root' by default. For mounted data locations
+# (NFS with squashed mounts, mapped container mounts, etc) the local root user
+# will not have sufficient privileges to modify these files.
+#
+# Applies to:
+# * whisparr_srv_config_dir
+# * whisparr_srv_media_root_folders
+#
+# Default: False.
+whisparr_srv_user_data_manage_enable: false
+
 # Media folder permissions octal.
 #
 # Media folders specified by whisparr_media_root_folders will always be
-# recursively set using whisparr_media_perms_folder, whisparr_user, and
-# whisparr_group.
+# recursively set using whisparr_media_perms_folder, whisparr_srv_user, and
+# whisparr_srv_group.
 #
 # Default: '0755'.
 whisparr_media_perms_folder: '0755'
@@ -127,13 +151,15 @@ whisparr_media_perms_folder: '0755'
 # Enable setting of media file permissions?
 #
 # Set file permissions within whisparr_media_root_folders using
-# whisparr_media_perms_file, whisparr_user, and whisparr_group. Large sets of
-# files may be slow to set permissions.
+# whisparr_media_perms_file, whisparr_srv_user, and whisparr_srv_group. Large
+# sets of files may be slow to set permissions.
 #
 # Useful when first configuring to ensure service has access to all specified
 # media locations. Suggest applying with extra options:
 #
-#   ansible-playbook site.yml --tags Whisparr -e 'whisparr_media_set_perms_file_enable=true'
+#   ansible-playbook site.yml
+#       --tags Whisparr
+#       -e 'whisparr_media_set_perms_file_enable=true'
 #
 # Default: False.
 whisparr_media_set_perms_file_enable: false

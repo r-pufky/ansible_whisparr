@@ -26,22 +26,22 @@
       vars:
         test_name: 'Enable SSL | verify | script enabled | config.xml'
         test_src: 'files/config_script.xml'
-        test_file: '/var/lib/whisparr/config.xml'
+        test_file: '/data/whisparr/config/config.xml'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0600'
 
     - name: >-
         Update mechanisms | verify | script enabled |
-        /var/lib/whisparr/update_script
+        /data/whisparr/config/update_script
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-
           Update mechanisms | verify | script enabled |
-          /var/lib/whisparr/update_script
-        test_file: '/var/lib/whisparr/update_script'
+          /data/whisparr/config/update_script
+        test_file: '/data/whisparr/config/update_script'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0750'
@@ -58,22 +58,22 @@
       vars:
         test_name: 'Update mechanisms | verify | script toggled | config.xml'
         test_src: 'files/config_toggle.xml'
-        test_file: '/var/lib/whisparr/config.xml'
+        test_file: '/data/whisparr/config/config.xml'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0600'
 
     - name: >-
         Update mechanisms | verify | script toggled |
-        /var/lib/whisparr/update_script
+        /data/whisparr/config/update_script
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-
           Update mechanisms | verify | script toggled |
-          /var/lib/whisparr/update_script
-        test_file: '/var/lib/whisparr/update_script'
+          /data/whisparr/config/update_script
+        test_file: '/data/whisparr/config/update_script'
         test_owner: '{{ omit }}'
         test_group: '{{ omit }}'
         test_mode: '{{ omit }}'

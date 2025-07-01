@@ -26,22 +26,22 @@
       vars:
         test_name: 'Enable SSL | verify | SSL enabled | config.xml'
         test_src: 'files/config_ssl.xml'
-        test_file: '/var/lib/whisparr/config.xml'
+        test_file: '/data/whisparr/config/config.xml'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0600'
 
     - name: >-
         Enable SSL | verify | SSL enabled |
-        /var/lib/whisparr/whisparr.pfx
+        /data/whisparr/config/whisparr.pfx
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-
           Enable SSL | verify | SSL enabled |
-          /var/lib/whisparr/whisparr.pfx
-        test_file: '/var/lib/whisparr/whisparr.pfx'
+          /data/whisparr/config/whisparr.pfx
+        test_file: '/data/whisparr/config/whisparr.pfx'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0640'
@@ -58,21 +58,21 @@
       vars:
         test_name: 'Enable SSL | verify | SSL toggled | config.xml'
         test_src: 'files/config_toggle.xml'
-        test_file: '/var/lib/whisparr/config.xml'
+        test_file: '/data/whisparr/config/config.xml'
         test_owner: 'media'
         test_group: 'media'
         test_mode: '0600'
 
     - name:
-        'Enable SSL | verify | SSL toggled | /var/lib/whisparr/whisparr.pfx'
+        'Enable SSL | verify | SSL toggled | /data/whisparr/config/whisparr.pfx'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'file.yml'
       vars:
         test_name: >-
           Enable SSL | verify | SSL toggled |
-          /var/lib/whisparr/whisparr.pfx
-        test_file: '/var/lib/whisparr/whisparr.pfx'
+          /data/whisparr/config/whisparr.pfx
+        test_file: '/data/whisparr/config/whisparr.pfx'
         test_owner: '{{ omit }}'
         test_group: '{{ omit }}'
         test_mode: '{{ omit }}'

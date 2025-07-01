@@ -5,7 +5,7 @@
   <InstanceName>Whisparr</InstanceName>
   <EnableSsl>True</EnableSsl>
   <SslPort>8008</SslPort>
-  <SslCertPath>/var/lib/whisparr/whisparr.pfx</SslCertPath>
+  <SslCertPath>/data/whisparr/config/whisparr.pfx</SslCertPath>
   <SslCertPassword>test</SslCertPassword>
   <AuthenticationMethod>Forms</AuthenticationMethod>
   <AuthenticationRequired>DisabledForLocalAddresses</AuthenticationRequired>

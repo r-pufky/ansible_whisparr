@@ -10,15 +10,32 @@
 #
 # Whisparr uses the generic Servarr installation scripts.
 #
+# The latest 'version' can determined from download:
+#
+#   wget --content-disposition 'http://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
+
+# Updates:
+# * New MAJOR, MINOR releases should hard branch at version before starting
+#   (e.g. 2.14.x branch).
+# * Keep a separate change log as changes are made, you will not remember all
+#   of them.
+# * Use bare-metal docs to validate package/process changes.
+# * Update role defaults (includes updating defaults, tasks):
+#   * Use configuration docs to add new variables.
+#   * Use defaults/ to remove any changed/deprecated variables.
+# * Update tests for any changes.
+# * Standard role validation testing (yamllint, ansible-lint, todo, noqa).
+# * Tag with MAJOR.MINOR version, with PATCH representing role change.
+#
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # * https://github.com/Whisparr/Whisparr/releases
 # yamllint enable rule:line-length
 
 # Last time Whisparr options were validated against a default configuration.
-whisparr_role_validate_date: '2025-02-05'
+whisparr_role_validate_date: '2025-07-01'
 whisparr_role_validate_release: 'bookworm'
-whisparr_role_validate_version: 'v2.0.0.787'
+whisparr_role_validate_version: 'v2.0.0.1112'
 whisparr_role_validate_script_release: '3.0.12'
 whisparr_role_validate_script_date: '2024-04-09'
 
@@ -44,7 +61,7 @@ whisparr_role_repo_extract_dir: '/opt/whisparr'
 whisparr_role_repo_extract_symlink: '/opt/whisparr/whisparr'
 whisparr_role_repo_release_specifier: 'v'
 whisparr_role_repo_release_asset:
-  'Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz'
+  'Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz'
 # whisparr_role_repo_release_asset:
 #   'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
 whisparr_role_repo_release_asset_static_url: '{{

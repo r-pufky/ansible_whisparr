@@ -5,12 +5,12 @@
 # SSL is enabled and toggled correctly.
 #
 # Tests:
-# * /var/lib/whisparr/whisparr.pfx exists.
+# * /data/whisparr/config/whisparr.pfx exists.
 # * toggling ssl on, then off removes whisparr.pfx.
 #  <EnableSsl>False</EnableSsl>  # true requires ssl_cert
-#  <SslCertPath>/var/lib/whisparr/snakeoil.pfx</SslCertPath>
+#  <SslCertPath>/data/whisparr/config/snakeoil.pfx</SslCertPath>
 #  <SslCertPassword>testing</SslCertPassword>  # stored plaintext.
-# * whisparr_config_enable_ssl -- test when false w and w/o cert.
+# * whisparr_cfg_enable_ssl -- test when false w and w/o cert.
 
 dependency:
   name: 'galaxy'
@@ -27,29 +27,29 @@ provisioner:
   inventory:
     group_vars:
       all:
-        whisparr_config_enable_ssl: true
-        whisparr_config_ssl_cert_path: '{{
+        whisparr_cfg_enable_ssl: true
+        whisparr_cfg_ssl_cert_path: '{{
             lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
             "/molecule/cache/test.pfx"
           }}'
-        whisparr_config_ssl_cert_password: 'test'
+        whisparr_cfg_ssl_cert_password: 'test'
         whisparr_media_root_folders: ['/data/media']
-        whisparr_config_api_key: 'abcdef1234567890abcdef1234567890'
+        whisparr_cfg_api_key: 'abcdef1234567890abcdef1234567890'
         repo_testing_enable: true
         repo_testing_versions:
           - comment: 'default'
-            version: '2.0.0.787'
+            version: '2.0.0.1112'
             asset: '{{
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/" ~
-                "Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz"
+                "Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz"
               }}'
           - comment: 'toggle'
-            version: '2.0.0.787'
+            version: '2.0.0.1112'
             asset: '{{
                 lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~
                 "/molecule/cache/" ~
-                "Whisparr.develop.2.0.0.787.linux-core-x64.tar.gz"
+                "Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz"
               }}'
 platforms:
   - name: 'whisparr-debian-12-enable_ssl'

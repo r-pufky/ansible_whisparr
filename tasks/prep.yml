@@ -3,139 +3,64 @@
 ###############################################################################
 # Whisparr Prep
 ###############################################################################
-# Prep Whisparr variables for installation and upgrade. *arr services use the
-# same codebase; any bugs or fixes should be checked for all related services.
-#
-# Generates:
-#   _whisparr_uid: int - whisparr user UID.
-#   _whisparr_gid: int - whisparr user GID.
-#   _whisparr_migrate_metadata: list of str - files and directories to migrate.
-#
-# Reference:
-# * https://whisparr.video/
-# * https://wiki.servarr.com/whisparr
-# * https://github.com/Whisparr/Whisparr/releases
-# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
-# yamllint disable rule:line-length
+# *arr services use the same codebase; any bugs or fixes should be checked for
+# all related services.
 
 - name: 'Prep | assert SSL requirements'
-  when: whisparr_config_enable_ssl
+  when: _whisparr_cfg_enable_ssl.raw
   ansible.builtin.assert:
     quiet: true
     that:
-      - whisparr_config_ssl_cert_path | length > 0
+      - _whisparr_cfg_ssl_cert_path.parsed | length > 0
     fail_msg: >
-      whisparr_config_enable_ssl=true requires
-      whisparr_config_ssl_cert_path set.
+      ✘ whisparr_cfg_enable_ssl=true requires
+      whisparr_cfg_ssl_cert_path set.
+
+      whisparr_cfg_ssl_cert_path: '{{ _whisparr_cfg_ssl_cert_path.raw }}'
 
 - name: 'Prep | assert update script requirements'
-  when: not whisparr_config_update_mechanism
+  when: not _whisparr_cfg_update_mechanism.raw
   ansible.builtin.assert:
     quiet: true
     that:
-      - whisparr_config_update_script_path | length > 0
+      - _whisparr_cfg_update_script_path.parsed | length > 0
     fail_msg: >
-      whisparr_config_update_script_path must be set when
-      whisparr_config_update_mechanism=False.
+      ✘ whisparr_cfg_update_mechanism=false requires
+      whisparr_cfg_update_script_path set.
+
+      whisparr_cfg_update_script_path: '{{ _whisparr_cfg_update_script_path.raw }}'
 
 - name: 'Prep | manage users'
-  when: whisparr_create_user
+  when: _whisparr_srv_create_user.raw
   ansible.builtin.include_role:
     name: 'r_pufky.deb.users'
     tasks_from: 'role_account_add.yml'
   vars:
-    users_role_group: '{{ whisparr_role_group }}'
     users_role_user: '{{ whisparr_role_user }}'
+    users_role_group: '{{ whisparr_role_group }}'
 
-- name: 'Prep | enumerate system user {{ whisparr_user }}'
+- name: 'Prep | enumerate system user {{ _whisparr_srv_user.raw }}'
   ansible.builtin.user:
-    name: '{{ whisparr_user }}'
+    name: '{{ _whisparr_srv_user.raw }}'
   check_mode: true
   changed_when: false
-  register: _whisparr_user_query
+  register: _whisparr_srv_user_query
 
 - name: 'Prep | parse system user UID/GID'
   ansible.builtin.set_fact:
-    _whisparr_uid: '{{ _whisparr_user_query.uid }}'
-    _whisparr_gid: '{{ _whisparr_user_query.group }}'
-
-# Whisparr does not consistently apply casing to XML settings and are
-# frequently mis-spelled, inconsistently spelled, ordered, or strings used for
-# boolean values; so we have to explicitly map those settings to the equivalent
-# role settings. Order does not matter but will change based on WebUI usage and
-# what values were changed last. This can lead to 'changed' configurations when
-# no values were actually changed.
-- name: 'Prep | build base config'
-  ansible.builtin.set_fact:
-    _whisparr_config: {
-      # General
-      BindAddress: '{{ whisparr_config_bind_address | default("*") }}',
-      Port: '{{ whisparr_config_port | default(6969) }}',
-      UrlBase: '{{ whisparr_config_url_base | default("") }}',
-      InstanceName: '{{ whisparr_config_instance_name | default("Whisparr") }}',
-      EnableSsl: '{{
-          whisparr_config_enable_ssl | default(false) |
-          bool | string | capitalize
-        }}',
-      SslPort: '{{ whisparr_config_ssl_port | default(8008) }}',
-      SslCertPath: '{{
-          "{{ whisparr_service_data_dir }}/whisparr.pfx"
-          if whisparr_config_enable_ssl | default(false) else
-          ""
-        }}',
-      SslCertPassword: '{{ whisparr_config_ssl_cert_password | default("") }}',
-      # TODO(V4): whisparr_config_authentication_method switches from 'none' to
-      #     'eternal' on V4 codebase sync.
-      AuthenticationMethod: '{{
-          whisparr_config_authentication_method | default("Forms") | capitalize
-        }}',
-      AuthenticationRequired: '{{
-          "Enabled"
-          if whisparr_config_authentication_required | default(false) else
-          "DisabledForLocalAddresses"
-        }}',
-      ApiKey: '{{
-          whisparr_config_api_key |
-          default(inventory_hostname | md5 | truncate(32, true, ""))
-        }}',
-      LogLevel: '{{ whisparr_config_log_level | default("info") | lower }}',
-      # TODO(role): uncomment when whisparr syncs to head.
-      # LogSizeLimit: '{{ whisparr_config_log_size_limit | default(1) }}',
-      AnalyticsEnabled: '{{
-          whisparr_config_analytics_enabled | default(false) |
-          bool | string | capitalize
-        }}',
-      Branch: '{{ whisparr_config_branch | default("nightly") | lower }}',
-      UpdateAutomatically: '{{
-          whisparr_config_update_automatically | default(false) |
-          bool | string | capitalize
-        }}',
-      UpdateMechanism: '{{
-          "BuiltIn"
-          if whisparr_config_update_mechanism | default(true) else
-          "Script"
-        }}',
-      UpdateScriptPath: '{{
-          "{{ whisparr_service_data_dir }}/update_script"
-          if not whisparr_config_update_mechanism | default(true) else
-          ""
-        }}',
-      LaunchBrowser: '{{
-          whisparr_config_launch_browser | default(false) |
-          bool | string | capitalize
-        }}',
-      # Settings > UI > Style
-      Theme: '{{ whisparr_config_theme | default("auto") | lower }}',
-    }
-    _whisparr_migrate_metadata: '{{
-        whisparr_role_repo_extract_migrate_files
-        if not whisparr_service_migrate_metadata else
-        whisparr_role_repo_extract_migrate_files + ["MediaCover"]
+    _whisparr_srv_user: '{{
+        _whisparr_srv_user |
+        combine({"parsed": _whisparr_srv_user_query.uid})
+      }}'
+    _whisparr_srv_group: '{{
+        _whisparr_srv_group |
+        combine({"parsed": _whisparr_srv_user_query.group})
       }}'
 
-- name: 'Prep | add config extensions'
-  when: whisparr_config_extensions | length > 0
-  ansible.builtin.set_fact:
-    _whisparr_config: '{{
-        _whisparr_config | combine(whisparr_config_extensions, recursive=true)
-      }}'
+- name: 'Prep | stop services'
+  ansible.builtin.systemd:
+    name: '{{ item }}'
+    state: 'stopped'
+  failed_when: false
+  loop:
+    - 'whisparr.service'

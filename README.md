@@ -29,10 +29,10 @@ permissions will be set to ensure Whisparr can read files.
   roles:
      - 'r_pufky.whisparr'
   vars:
-    whisparr_service_version: 'latest'
-    whisparr_config_api_key: '{{ vault_whisparr_api_key }}'
-    whisparr_config_update_automatically: true
-    whisparr_config_theme: 'dark'
+    whisparr_srv_version: 'latest'
+    whisparr_cfg_api_key: '{{ vault_whisparr_api_key }}'
+    whisparr_cfg_update_automatically: true
+    whisparr_cfg_theme: 'dark'
     whisparr_media_root_folders:
       - '/data/media'
     whisparr_media_set_perms_file_enable: true
@@ -44,7 +44,7 @@ toggled on after the user exists in the database . Suggest running initial role
 application temporarily disabling this option:
 
 ``` bash
-ansible-playbook whisparr.yml -e 'whisparr_config_authentication_method=none'
+ansible-playbook whisparr.yml -e 'whisparr_cfg_authentication_method=none'
 ```
 
 ## Development

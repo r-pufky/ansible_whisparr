@@ -11,7 +11,7 @@
       vars:
         test_name: 'Prepare | create cache'
 
-    # TODO(role): change to version when released. Potentially may break.
+    # TODO(role): Change to version when released. Potentially may break.
     - name: 'Prepare | check 2.0.0.1112'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'

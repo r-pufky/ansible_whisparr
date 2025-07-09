@@ -94,14 +94,14 @@ whisparr_srv_force_config_only_enable: false
 
 # User that Whisparr will run under.
 #
-# Enable whisparr_create_user if this account is not externally managed.
+# Enable whisparr_srv_create_user if this account is not externally managed.
 #
 # Default: 'media'.
 whisparr_srv_user: 'media'
 
 # Group that Whisparr will run under.
 #
-# Enable whisparr_create_user if this group is not externally managed.
+# Enable whisparr_srv_create_user if this group is not externally managed.
 #
 # Default: 'media'.
 whisparr_srv_group: 'media'
@@ -111,7 +111,7 @@ whisparr_srv_group: 'media'
 # Applied via r_pufky.deb.users, see vars/main.yml for default user attributes.
 #
 # Default: True.
-whisparr_create_user: true
+whisparr_srv_create_user: true
 
 ###############################################################################
 # Media Permissions

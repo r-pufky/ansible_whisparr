@@ -38,7 +38,7 @@
   ansible.builtin.include_role:
     name: 'r_pufky.deb.repo'
   vars:
-    # TODO(role): revert to *arr standard when released.
+    # TODO(role): Revert to *arr standard when released.
     repo_release_owner: '{{ whisparr_role_repo_release_owner }}'
     repo_release_repo: '{{ whisparr_role_repo_release_repo }}'
     repo_release_tag: '{{ _whisparr_srv_version.raw }}'

@@ -25,7 +25,7 @@ provisioner:
       all:
         whisparr_cfg_update_mechanism: false
         whisparr_cfg_update_script_path: 'files/update.sh'
-        whisparr_media_root_folders: ['/data/media']
+        whisparr_srv_media_root_folders: ['/data/media']
         whisparr_cfg_api_key: 'abcdef1234567890abcdef1234567890'
         repo_testing_enable: true
         repo_testing_versions:

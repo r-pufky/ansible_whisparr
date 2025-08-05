@@ -78,7 +78,7 @@ whisparr_srv_restart_daily_enable: true
 # Only apply configuration?
 #
 # Reduces role application time by ONLY applying configuration changes. Does
-# NOT affect whisparr_media_set_perms_file_enable.
+# NOT affect whisparr_srv_media_set_perms_file_enable.
 #
 # This should ONLY be used after the role has been fully run once.
 #
@@ -124,10 +124,10 @@ whisparr_srv_create_user: true
 # Root media storage folders.
 #
 # Folders will be created/set with whisparr_srv_user, whisparr_srv_group,
-# whisparr_media_perms_folder.
+# whisparr_srv_media_perms_folder.
 #
 # Default: [].
-whisparr_media_root_folders: []
+whisparr_srv_media_root_folders: []
 
 # Enable user management of data/media files?
 #
@@ -145,28 +145,28 @@ whisparr_srv_user_data_manage_enable: false
 
 # Media folder permissions octal.
 #
-# Media folders specified by whisparr_media_root_folders will always be
-# recursively set using whisparr_media_perms_folder, whisparr_srv_user, and
+# Media folders specified by whisparr_srv_media_root_folders will always be
+# recursively set using whisparr_srv_media_perms_folder, whisparr_srv_user, and
 # whisparr_srv_group.
 #
 # Default: '0755'.
-whisparr_media_perms_folder: '0755'
+whisparr_srv_media_perms_folder: '0755'
 
 # Enable setting of media file permissions?
 #
-# Set file permissions within whisparr_media_root_folders using
-# whisparr_media_perms_file, whisparr_srv_user, and whisparr_srv_group. Large
-# sets of files may be slow to set permissions.
+# Set file permissions within whisparr_srv_media_root_folders using
+# whisparr_srv_media_perms_file, whisparr_srv_user, and whisparr_srv_group.
+# Large sets of files may be slow to set permissions.
 #
 # Useful when first configuring to ensure service has access to all specified
 # media locations. Suggest applying with extra options:
 #
 #   ansible-playbook site.yml
 #       --tags Whisparr
-#       -e 'whisparr_media_set_perms_file_enable=true'
+#       -e 'whisparr_srv_media_set_perms_file_enable=true'
 #
 # Default: False.
-whisparr_media_set_perms_file_enable: false
+whisparr_srv_media_set_perms_file_enable: false
 
 # Media file permissions octal. Default: '0644'.
-whisparr_media_perms_file: '0644'
+whisparr_srv_media_perms_file: '0644'

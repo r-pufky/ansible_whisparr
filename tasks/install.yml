@@ -45,11 +45,12 @@
     repo_release_asset: '{{ whisparr_role_repo_release_asset }}'
     repo_release_asset_static_url:
       '{{ whisparr_role_repo_release_asset_static_url }}'
-    repo_file_owner: '{{ _whisparr_srv_user.parsed }}'
-    repo_file_group: '{{ _whisparr_srv_group.parsed }}'
+    repo_file_owner: '{{ _whisparr_srv_user.role_uid }}'
+    repo_file_group: '{{ _whisparr_srv_group.role_gid }}'
     repo_extract_dir: '{{ whisparr_role_repo_extract_dir }}'
     repo_extract_symlink: '{{ whisparr_role_repo_extract_symlink }}'
-    repo_extract_migrate_files: '{{ _whisparr_srv_migrate_metadata.role }}'
+    repo_extract_migrate_files:
+      '{{ _whisparr_srv_migrate_metadata.role_files }}'
     repo_extract_delete_old_versions:
       '{{ _whisparr_srv_delete_old_versions_enable.raw }}'
     repo_force_overwrite: '{{ _whisparr_srv_force_overwrite.raw }}'

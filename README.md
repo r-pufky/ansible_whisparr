@@ -33,9 +33,9 @@ permissions will be set to ensure Whisparr can read files.
     whisparr_cfg_api_key: '{{ vault_whisparr_api_key }}'
     whisparr_cfg_update_automatically: true
     whisparr_cfg_theme: 'dark'
-    whisparr_media_root_folders:
+    whisparr_srv_media_root_folders:
       - '/data/media'
-    whisparr_media_set_perms_file_enable: true
+    whisparr_srv_media_set_perms_file_enable: true
 ```
 
 ### Initial Deployment with No User

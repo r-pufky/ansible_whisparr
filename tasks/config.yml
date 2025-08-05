@@ -13,84 +13,82 @@
 - name: 'Config | set {{ _whisparr_srv_config_dir.raw }}'
   ansible.builtin.file:
     path: '{{ _whisparr_srv_config_dir.raw }}'
-    owner: '{{ _whisparr_srv_user.raw }}'
-    group: '{{ _whisparr_srv_group.raw }}'
+    owner: '{{ _whisparr_srv_user.role_uid }}'
+    group: '{{ _whisparr_srv_group.role_gid }}'
     mode: '0775'
     recurse: '{{ _whisparr_srv_permissions_recursive_enable.raw }}'
     state: 'directory'
   changed_when: false  # https://github.com/ansible/ansible/issues/32636
-  become:
-    '{{ true if _whisparr_srv_user_data_manage_enable.raw else omit }}'
+  become: true
   become_user: '{{
       _whisparr_srv_user.raw
       if _whisparr_srv_user_data_manage_enable.raw else
-      omit
+      "root"
     }}'
 
-- name: 'Config | set {{ _whisparr_cfg_ssl_cert_path.parsed }}'
+- name: 'Config | set {{ _whisparr_cfg_ssl_cert_path.raw }}'
   when: _whisparr_cfg_enable_ssl.raw
   ansible.builtin.copy:
     src: '{{ _whisparr_cfg_ssl_cert_path.raw }}'
-    dest: '{{ _whisparr_cfg_ssl_cert_path.parsed }}'
-    owner: '{{ _whisparr_srv_user.parsed }}'
-    group: '{{ _whisparr_srv_group.parsed }}'
+    dest: '{{ _whisparr_cfg_ssl_cert_path.role_dest }}'
+    owner: '{{ _whisparr_srv_user.role_uid }}'
+    group: '{{ _whisparr_srv_group.role_gid }}'
     mode: '0640'
     force: true
 
-- name: 'Config | remove {{ _whisparr_cfg_ssl_cert_path.role }}'
+- name: 'Config | remove {{ _whisparr_cfg_ssl_cert_path.role_dest }}'
   when: not _whisparr_cfg_enable_ssl.raw
   ansible.builtin.file:
-    dest: '{{ _whisparr_cfg_ssl_cert_path.role }}'
+    dest: '{{ _whisparr_cfg_ssl_cert_path.role_dest }}'
     state: 'absent'
 
-- name: 'Config | set {{ _whisparr_cfg_update_script_path.parsed }}'
+- name: 'Config | set {{ _whisparr_cfg_update_script_path.raw }}'
   when: not _whisparr_cfg_update_mechanism.raw
   ansible.builtin.copy:
     src: '{{ _whisparr_cfg_update_script_path.raw }}'
-    dest: '{{ _whisparr_cfg_update_script_path.parsed }}'
-    owner: '{{ _whisparr_srv_user.parsed }}'
-    group: '{{ _whisparr_srv_group.parsed }}'
+    dest: '{{ _whisparr_cfg_update_script_path.role_dest }}'
+    owner: '{{ _whisparr_srv_user.role_uid }}'
+    group: '{{ _whisparr_srv_group.role_gid }}'
     mode: '0750'
     force: true
 
-- name: 'Config | remove {{ _whisparr_cfg_update_script_path.role }}'
+- name: 'Config | remove {{ _whisparr_cfg_update_script_path.role_dest }}'
   when: _whisparr_cfg_update_mechanism.raw
   ansible.builtin.file:
-    dest: '{{ _whisparr_cfg_update_script_path.role }}'
+    dest: '{{ _whisparr_cfg_update_script_path.role_dest }}'
     state: 'absent'
 
 - name: 'Config | set media root folders'
   ansible.builtin.file:
     path: '{{ item }}'
-    owner: '{{ _whisparr_srv_user.parsed }}'
-    group: '{{ _whisparr_srv_group.parsed }}'
+    owner: '{{ _whisparr_srv_user.role_uid }}'
+    group: '{{ _whisparr_srv_group.role_gid }}'
     mode: '{{ _whisparr_srv_media_perms_folder.raw }}'
     recurse: '{{ _whisparr_srv_permissions_recursive_enable.raw }}'
     state: 'directory'
   changed_when: false  # https://github.com/ansible/ansible/issues/32636
-  become:
-    '{{ true if _whisparr_srv_user_data_manage_enable.raw else omit }}'
+  become: true
   become_user: '{{
       _whisparr_srv_user.raw
       if _whisparr_srv_user_data_manage_enable.raw else
-      omit
+      "root"
     }}'
   loop: '{{ _whisparr_srv_media_root_folders.raw }}'
 
+# yamllint disable rule:line-length
 - name: 'Config | set media root files'
   when: _whisparr_srv_media_set_perms_file_enable.raw
   ansible.builtin.shell: >-
     find '{{ item }}'
     -type f
     -exec chmod {{ _whisparr_srv_media_perms_file.raw }} {};
-      chown {{ _whisparr_srv_user.parsed }}:{{ _whisparr_srv_group.parsed }} {} \;
+      chown {{ _whisparr_srv_user.role_uid }}:{{ _whisparr_srv_group.role_gid }} {} \;
   changed_when: false  # https://github.com/ansible/ansible/issues/32636
-  become:
-    '{{ true if _whisparr_srv_user_data_manage_enable.raw else omit }}'
+  become: true
   become_user: '{{
       _whisparr_srv_user.raw
       if _whisparr_srv_user_data_manage_enable.raw else
-      omit
+      "root"
     }}'
   loop: '{{ _whisparr_srv_media_root_folders.raw }}'
 
@@ -100,9 +98,9 @@
 - name: 'Config | set Whisparr configuration'
   ansible.builtin.template:
     src: 'config.xml.j2'
-    dest: '{{ _whisparr_srv_config_dir.parsed ~ "config.xml" }}'
-    owner: '{{ _whisparr_srv_user.parsed }}'
-    group: '{{ _whisparr_srv_group.parsed }}'
+    dest: '{{ _whisparr_srv_config_dir.data ~ "config.xml" }}'
+    owner: '{{ _whisparr_srv_user.role_uid }}'
+    group: '{{ _whisparr_srv_group.role_gid }}'
     mode: '0600'
 
 - name: 'Config | Whisparr service'

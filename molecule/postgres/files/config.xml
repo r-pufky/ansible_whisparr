@@ -14,9 +14,15 @@
   <AnalyticsEnabled>False</AnalyticsEnabled>
   <Branch>nightly</Branch>
   <UpdateAutomatically>False</UpdateAutomatically>
-  <UpdateMechanism>Script</UpdateMechanism>
-  <UpdateScriptPath>/data/whisparr/config/update_script</UpdateScriptPath>
+  <UpdateMechanism>BuiltIn</UpdateMechanism>
+  <UpdateScriptPath></UpdateScriptPath>
   <LaunchBrowser>False</LaunchBrowser>
+  <PostgresHost>localhost</PostgresHost>
+  <PostgresPort>5432</PostgresPort>
+  <PostgresUser>whisparr</PostgresUser>
+  <PostgresPassword>test</PostgresPassword>
+  <PostgresMainDb>whisparr-main</PostgresMainDb>
+  <PostgresLogDb>whisparr-log</PostgresLogDb>
   <Theme>auto</Theme>
   <WhisparrMetadata>https://api.whisparr.com/v3/{route}</WhisparrMetadata>
 </Config>

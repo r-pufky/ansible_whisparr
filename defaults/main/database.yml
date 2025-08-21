@@ -1,0 +1,64 @@
+---
+###############################################################################
+# Whisparr Database Options
+###############################################################################
+# Existing databases are migrated automatically when new versions are
+# installed. Migration between database platforms is not supported and must be
+# done manually.
+
+# Database backend.
+#
+# Values:
+#   postgres: Postgres 14+. HIGHLY recommended.
+#     sqlite: Sqlite3 (default).
+#
+# Default: 'sqlite'.
+whisparr_cfg_database_type: 'sqlite'
+
+###############################################################################
+# PostgreSQL Database Options
+###############################################################################
+# Postgres requires pre-existing databases with root privileges to initialize
+# tables and manage migrations. Postgres databases are NOT backed up by
+# whisparr.
+#
+# Manual Migration Overview:
+# * Create postgres databases.
+# * systemctl stop whisparr
+# * sqlite3 whisparr.db vacuum
+# * Update config.xml with DB settings (or re-apply role with postgres).
+# * systemctl start whisparr
+# * Confirm whisparr running (appears empty).
+# * systemctl stop whisparr
+# * cp whisparr.db postgres:/tmp
+# * chmod o+r /tmp/whisparr2.db
+# * Install pgloader to /usr/local/bin
+# * Login to postgres: psql -d whisparr
+# * Remove auto-generated tables (see reference).
+# * Execute pgloader. Use 'prefetch rows' and 'batch size' options.
+#   * Many WARNINGS may appear; these can be ignored.
+# * systemctl start whisparr
+# * No migrations have needed post migration steps in practice.
+# * Backup and remove sqlite3 database files.
+#
+# Reference:
+# * https://wiki.servarr.com/whisparr/postgres-setup
+# * https://github.com/Roxedus/Pgloader-bin
+
+# Database host. Default: 'localhost'.
+whisparr_cfg_database_host: 'localhost'
+
+# Database port. Default: 5432.
+whisparr_cfg_database_port: 5432
+
+# Database user. Default: 'whisparr'.
+whisparr_cfg_database_user: 'whisparr'
+
+# Database password. Default: ''.
+whisparr_cfg_database_password: ''
+
+# Main database name. Default: 'whisparr-main'.
+whisparr_cfg_database_main: 'whisparr-main'
+
+# Log database name. Default: 'whisparr-log'.
+whisparr_cfg_database_log: 'whisparr-log'

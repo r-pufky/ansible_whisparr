@@ -18,4 +18,5 @@
   <UpdateScriptPath></UpdateScriptPath>
   <LaunchBrowser>False</LaunchBrowser>
   <Theme>auto</Theme>
+  <WhisparrMetadata>https://api.whisparr.com/v3/{route}</WhisparrMetadata>
 </Config>

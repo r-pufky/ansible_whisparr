@@ -216,3 +216,14 @@ whisparr_cfg_launch_browser: false
 #
 # Default: 'auto'.
 whisparr_cfg_theme: 'auto'
+
+###############################################################################
+# Settings > API
+###############################################################################
+
+# Metadata API.
+#
+# Specify alternative for private metadata lookup.
+#
+# Default: 'https://api.whisparr.com/v3/{route}'.
+whisparr_cfg_whisparr_metadata: 'https://api.whisparr.com/v3/{route}'

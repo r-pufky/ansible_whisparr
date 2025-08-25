@@ -8,7 +8,7 @@
         name: 'r_pufky.srv.whisparr'
 
 - name: 'Update mechanisms | converge | toggle updates'
-  hosts: 'whisparr-debian-12-update_mechanisms-toggle'
+  hosts: 'whisparr-debian-13-update_mechanisms-toggle'
   gather_facts: false
   tasks:
     - name: >-

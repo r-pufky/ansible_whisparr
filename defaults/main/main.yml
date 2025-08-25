@@ -24,7 +24,7 @@
 #   RECOMMEND: Only use 'latest' until an actual release happens.
 #
 # Values:
-#   {VERSION}: Tagged release to use ('v2.0.0.1112').
+#   {VERSION}: Tagged release to use ('v2.0.0.1250').
 #      latest: Use latest stable release.
 #
 # Default: 'latest'.

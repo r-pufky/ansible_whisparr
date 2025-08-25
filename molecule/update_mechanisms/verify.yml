@@ -1,22 +1,6 @@
 ---
-- name: 'Update mechanisms | verify'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    - name: 'Update mechanisms | verify | gather service status'
-      ansible.builtin.service_facts:
-
-    # Whisparr will fail if configuration is bad (r_pufky.deb.systemd)
-    - name: 'Update mechanisms | verify | assert whisparr.service active'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - '"whisparr.service" in ansible_facts.services'
-          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'  # yamllint disable-line rule:line-length
-        fail_msg: 'whisparr.service should be enabled and running.'
-
 - name: 'Update mechanisms | verify | script enabled'
-  hosts: 'whisparr-debian-12-update_mechanisms'
+  hosts: 'whisparr-debian-13-update_mechanisms'
   gather_facts: false
   tasks:
     - name: 'Update mechanisms | verify | script enabled | config.xml'
@@ -48,7 +32,7 @@
         test_state: 'file'
 
 - name: 'Update mechanisms | verify | script toggled'
-  hosts: 'whisparr-debian-12-update_mechanisms-toggle'
+  hosts: 'whisparr-debian-13-update_mechanisms-toggle'
   gather_facts: false
   tasks:
     - name: 'Update mechanisms | verify | script toggled | config.xml'

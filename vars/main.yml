@@ -10,7 +10,8 @@
 #
 # Whisparr uses the generic Servarr installation scripts.
 #
-# The latest 'version' can determined from download:
+# The latest 'version' can determined from running the default test instance
+# and checking system > updates or download the latest binary:
 #
 #   wget --content-disposition 'http://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
 
@@ -33,9 +34,9 @@
 # yamllint enable rule:line-length
 
 # Last time Whisparr options were validated against a default configuration.
-whisparr_role_validate_date: '2025-07-01'
-whisparr_role_validate_release: 'bookworm'
-whisparr_role_validate_version: 'v2.0.0.1112'
+whisparr_role_validate_date: '2025-08-25'
+whisparr_role_validate_release: 'trixie'
+whisparr_role_validate_version: 'v2.0.0.1250'
 whisparr_role_validate_script_release: '3.0.12'
 whisparr_role_validate_script_date: '2024-04-09'
 
@@ -47,7 +48,7 @@ whisparr_role_packages:
   - 'sqlite3'  # Whisparr DB.
   - 'gnupg2'  # GPG for certificates.
   - 'ca-certificates'  # up to date certificates for certificate validation.
-  - 'libicu72'  # International Unicode support for .NET.
+  - 'libicu76'  # International Unicode support for .NET.
 
 ###############################################################################
 # Whisparr GitHub Options
@@ -61,7 +62,7 @@ whisparr_role_repo_extract_dir: '/opt/whisparr'
 whisparr_role_repo_extract_symlink: '/opt/whisparr/whisparr'
 whisparr_role_repo_release_specifier: 'v'
 whisparr_role_repo_release_asset:
-  'Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz'
+  'Whisparr.develop.2.0.0.1250.linux-core-x64.tar.gz'
 # whisparr_role_repo_release_asset:
 #   'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
 whisparr_role_repo_release_asset_static_url: '{{

@@ -45,23 +45,6 @@
 # * https://github.com/Whisparr/Whisparr/releases
 # * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 
-# TODO(2.0+): Remove variable renaming check on next major Whisparr release.
-- name: 'Annotate | check deprecated variable usage'
-  when: >
-    hostvars[inventory_hostname] | dict2items |
-    selectattr("key", "match", "whisparr_config_*") | length > 0 or
-    hostvars[inventory_hostname] | dict2items |
-    selectattr("key", "match", "whisparr_service_*") | length > 0
-  ansible.builtin.fail:
-    msg: |
-      ✘ Role variables have migrated. Read defaults and update.
-
-      whisparr_config_* -> whisparr_cfg_*
-      whisparr_service_* -> whisparr_srv_*
-      whisparr_* -> whisparr_srv_*
-
-      DB files MUST be manually migrated if whisparr_srv_config_dir changed.
-
 - name: 'Annotate | sanitize & annotate service defaults'
   ansible.builtin.set_fact:
     _whisparr_srv_version: {

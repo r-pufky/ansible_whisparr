@@ -6,6 +6,7 @@
 # *arr services use the same codebase; any bugs or fixes should be checked for
 # all related services.
 
+# yamllint disable rule:line-length
 - name: 'Prep | assert database requirements'
   when: _whisparr_cfg_database_type.raw == 'postgres'
   ansible.builtin.assert:
@@ -17,15 +18,19 @@
       - _whisparr_cfg_database_password.raw | length > 0
       - _whisparr_cfg_database_main.raw | length > 0
       - _whisparr_cfg_database_log.raw | length > 0
-    fail_msg: >
-      ✘ whisparr_cfg_database_type=postgres requires all options set.
-
-          whisparr_cfg_database_host: '{{ _whisparr_cfg_database_host.raw }}'
-          whisparr_cfg_database_port: '{{ _whisparr_cfg_database_port.raw }}'
-          whisparr_cfg_database_user: '{{ _whisparr_cfg_database_user.raw }}'
-      whisparr_cfg_database_password: '{{ _whisparr_cfg_database_password.raw }}'
-          whisparr_cfg_database_main: '{{ _whisparr_cfg_database_main.raw }}'
-           whisparr_cfg_database_log: '{{ _whisparr_cfg_database_log.raw }}'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │   whisparr_cfg_database_type=postgres requires all options set.   │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ whisparr_cfg_database_host: '{{ _whisparr_cfg_database_host.raw }}'
+      │ whisparr_cfg_database_port: '{{ _whisparr_cfg_database_port.raw }}'
+      │ whisparr_cfg_database_user: '{{ _whisparr_cfg_database_user.raw }}'
+      │ whisparr_cfg_database_password: '{{ _whisparr_cfg_database_password.raw }}'
+      │ whisparr_cfg_database_main: '{{ _whisparr_cfg_database_main.raw }}'
+      │ whisparr_cfg_database_log: '{{ _whisparr_cfg_database_log.raw }}'
+# yamllint enable rule:line-length
 
 - name: 'Prep | assert SSL requirements'
   when: _whisparr_cfg_enable_ssl.raw
@@ -33,11 +38,15 @@
     quiet: true
     that:
       - _whisparr_cfg_ssl_cert_path.raw | length > 0
-    fail_msg: >
-      ✘ whisparr_cfg_enable_ssl=true requires
-      whisparr_cfg_ssl_cert_path set.
-
-      whisparr_cfg_ssl_cert_path: '{{ _whisparr_cfg_ssl_cert_path.raw }}'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │                     SSL Requirements NOT met.                     │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ whisparr_cfg_enable_ssl=true requires:
+      │
+      │ whisparr_cfg_ssl_cert_path set
 
 - name: 'Prep | assert update script requirements'
   when: not _whisparr_cfg_update_mechanism.raw
@@ -45,11 +54,15 @@
     quiet: true
     that:
       - _whisparr_cfg_update_script_path.raw | length > 0
-    fail_msg: >
-      ✘ whisparr_cfg_update_mechanism=false requires
-      whisparr_cfg_update_script_path set.
-
-      whisparr_cfg_update_script_path: '{{ _whisparr_cfg_update_script_path.raw }}'
+    fail_msg: |
+      ╭───────────────────────────────────────────────────────────────────╮
+      │                                                                   │
+      │              Update mechanism requirements NOT met.               │
+      │                                                                   │
+      ├───────────────────────────────────────────────────────────────────╯
+      │ whisparr_cfg_update_mechanism=false requires:
+      │
+      │ whisparr_cfg_update_script_path set.
 
 - name: 'Prep | manage users'
   when: _whisparr_srv_create_user.raw

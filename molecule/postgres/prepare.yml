@@ -12,13 +12,13 @@
         test_name: 'Prepare | create cache'
 
     # TODO(role): Change to version when released. Potentially may break.
-    - name: 'Prepare | check 2.0.0.1112'
+    - name: 'Prepare | check 2.0.0.1250'
       ansible.builtin.include_role:
         name: 'r_pufky.lib.tests'
         tasks_from: 'cache_url.yml'
       vars:
-        test_name: 'Prepare | cache 2.0.0.1112'
-        test_dest: 'Whisparr.develop.2.0.0.1112.linux-core-x64.tar.gz'
+        test_name: 'Prepare | cache 2.0.0.1250'
+        test_dest: 'Whisparr.develop.2.0.0.1250.linux-core-x64.tar.gz'
         test_url: '{{
             "https://whisparr.servarr.com/v1/update/nightly/" ~
             "updatefile?os=linux&runtime=netcore&arch=x64"
@@ -35,7 +35,7 @@
         state: 'present'
 
 - name: 'Prepare'
-  hosts: 'whisparr-debian-12-postgres_user_data'
+  hosts: 'whisparr-debian-13-postgres_user_data'
   gather_facts: false
   tasks:
     - name: 'Prepare | simulate user media restriction'

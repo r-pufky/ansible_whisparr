@@ -8,7 +8,7 @@
         name: 'r_pufky.srv.whisparr'
 
 - name: 'Enable SSL | converge | toggle SSL'
-  hosts: 'whisparr-debian-12-enable_ssl-toggle'
+  hosts: 'whisparr-debian-13-enable_ssl-toggle'
   gather_facts: false
   tasks:
     - name: 'Enable SSL | converge | toggle SSL | apply r_pufky.srv.whisparr'

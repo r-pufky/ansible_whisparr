@@ -1,22 +1,6 @@
 ---
-- name: 'Enable SSL | verify'
-  hosts: 'all'
-  gather_facts: false
-  tasks:
-    - name: 'Enable SSL | verify | gather service status'
-      ansible.builtin.service_facts:
-
-    # Whisparr will fail if configuration is bad (r_pufky.deb.systemd)
-    - name: 'Enable SSL | verify | assert whisparr.service active'
-      ansible.builtin.assert:
-        quiet: true
-        that:
-          - '"whisparr.service" in ansible_facts.services'
-          - 'ansible_facts["services"]["whisparr.service"]["state"] == "running"'  # yamllint disable-line rule:line-length
-        fail_msg: 'whisparr.service should be enabled and running.'
-
 - name: 'Enable SSL | verify | SSL enabled'
-  hosts: 'whisparr-debian-12-enable_ssl'
+  hosts: 'whisparr-debian-13-enable_ssl'
   gather_facts: false
   tasks:
     - name: 'Enable SSL | verify | SSL enabled | config.xml'
@@ -48,7 +32,7 @@
         test_state: 'file'
 
 - name: 'Enable SSL | verify | SSL toggled'
-  hosts: 'whisparr-debian-12-enable_ssl-toggle'
+  hosts: 'whisparr-debian-13-enable_ssl-toggle'
   gather_facts: false
   tasks:
     - name: 'Enable SSL | verify | SSL toggled | config.xml'

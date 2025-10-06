@@ -84,11 +84,11 @@
   ansible.builtin.set_fact:
     _whisparr_srv_user: '{{
         _whisparr_srv_user |
-        combine({"role_uid": _whisparr_srv_user_query.uid})
+        combine({"_uid": _whisparr_srv_user_query.uid})
       }}'
     _whisparr_srv_group: '{{
         _whisparr_srv_group |
-        combine({"role_gid": _whisparr_srv_user_query.group})
+        combine({"_gid": _whisparr_srv_user_query.group})
       }}'
 
 - name: 'Prep | stop services'

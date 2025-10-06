@@ -2,7 +2,7 @@
 {% for header in _whisparr_order %}
 {%   for section in _whisparr_map | selectattr('value.section', '==', header) | sort(attribute='value.order') %}
 {%     if header == 'database' %}
-{%       if not section.value.role_unset %}
+{%       if section.value.keep %}
   <{{ section.value.key }}>{{ section.value.raw }}</{{ section.value.key }}>
 {%       endif %}
 {%     elif not section.value.deprecated %}

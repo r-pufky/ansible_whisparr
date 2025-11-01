@@ -3,6 +3,6 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Converge | apply r_pufky.srv.whisparr'
+    - name: 'Converge | apply r_pufky.arr.whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.whisparr'
+        name: 'r_pufky.arr.whisparr'

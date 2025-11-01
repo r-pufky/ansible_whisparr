@@ -3,16 +3,16 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Enable SSL | converge | apply r_pufky.srv.whisparr'
+    - name: 'Enable SSL | converge | apply r_pufky.arr.whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.whisparr'
+        name: 'r_pufky.arr.whisparr'
 
 - name: 'Enable SSL | converge | toggle SSL'
   hosts: 'whisparr-debian-13-enable_ssl-toggle'
   gather_facts: false
   tasks:
-    - name: 'Enable SSL | converge | toggle SSL | apply r_pufky.srv.whisparr'
+    - name: 'Enable SSL | converge | toggle SSL | apply r_pufky.arr.whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.whisparr'
+        name: 'r_pufky.arr.whisparr'
       vars:
         whisparr_cfg_enable_ssl: false

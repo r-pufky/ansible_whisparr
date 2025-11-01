@@ -3,9 +3,9 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Update mechanisms | converge | apply r_pufky.srv.whisparr'
+    - name: 'Update mechanisms | converge | apply r_pufky.arr.whisparr'
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.whisparr'
+        name: 'r_pufky.arr.whisparr'
 
 - name: 'Update mechanisms | converge | toggle updates'
   hosts: 'whisparr-debian-13-update_mechanisms-toggle'
@@ -13,8 +13,8 @@
   tasks:
     - name: >-
         Update mechanisms | converge | toggle updates |
-        apply r_pufky.srv.whisparr
+        apply r_pufky.arr.whisparr
       ansible.builtin.include_role:
-        name: 'r_pufky.srv.whisparr'
+        name: 'r_pufky.arr.whisparr'
       vars:
         whisparr_cfg_update_mechanism: true

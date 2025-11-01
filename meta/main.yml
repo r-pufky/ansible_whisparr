@@ -17,5 +17,6 @@ galaxy_info:
     - 'media'
     - 'movies'
     - 'adult'
+    - 'arr'
 
 dependencies: []

@@ -3,33 +3,27 @@
 ###############################################################################
 # Whisparr Role Options
 ###############################################################################
-# Base version used for current role creation. Whisparr will auto update once
-# properly installed; revisiting role tasks is not necessary unless a major
-# version is released. Additional configuration settings may need to be added
-# to defaults for point releases.
-#
 # Whisparr uses the generic Servarr installation scripts.
 #
 # The latest 'version' can determined from running the default test instance
 # and checking system > updates or download the latest binary:
 #
 #   wget --content-disposition 'http://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
-
+#
 # Updates:
-# * New MAJOR, MINOR releases should hard branch at version before starting
-#   (e.g. 2.14.x branch).
-# * Keep a separate change log as changes are made, you will not remember all
-#   of them.
+# * Branch for new Debian releases.
+# * KEEP a separate change log as changes are made.
 # * Use bare-metal docs to validate package/process changes.
 # * Update role defaults (includes updating defaults, tasks):
 #   * Use configuration docs to add new variables.
-#   * Use defaults/ to remove any changed/deprecated variables.
+#   * Use defaults to remove any changed/deprecated variables.
 # * Update tests for any changes.
-# * Standard role validation testing (yamllint, ansible-lint, todo, noqa).
-# * Tag with MAJOR.MINOR version, with PATCH representing role change.
+#   * Use BARE VERSION for find and replace to set new version.
+# * Standard role validation testing (yamllint, ansible-lint, to-do, no-qa).
+# * Tag with OS-APP-ROLE version.
 #
 # Reference:
-# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
+# * https://github.com/Servarr/Wiki/blob/master/servarr
 # * https://github.com/Whisparr/Whisparr/releases
 # yamllint enable rule:line-length
 
@@ -47,7 +41,7 @@ whisparr_role_validate_script_date: '2024-04-09'
 whisparr_role_packages:
   - 'sqlite3'  # Whisparr DB.
   - 'gnupg2'  # GPG for certificates.
-  - 'ca-certificates'  # up to date certificates for certificate validation.
+  - 'ca-certificates'  # Up to date certificates for certificate validation.
   - 'libicu76'  # International Unicode support for .NET.
 
 ###############################################################################

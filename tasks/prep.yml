@@ -1,100 +1,129 @@
 ---
-# yamllint disable rule:line-length
 ###############################################################################
-# Whisparr Prep
+#  Pre Execution Tasks
 ###############################################################################
+# Only use data annotations in role after merging role, defaults, runtime data.
+# Service may not exist if first install.
+#
 # *arr services use the same codebase; any bugs or fixes should be checked for
 # all related services.
 
-# yamllint disable rule:line-length
-- name: 'Prep | assert database requirements'
-  when: _whisparr_cfg_database_type.raw == 'postgres'
+- name: 'Prep | fact | record start time'
+  ansible.builtin.set_fact:
+    whisparr__srv: "{{ whisparr___release | r_pufky.data.v3(
+
+        _start=now(utc=True, fmt='%Y-%m-%dT%H%M%S'),
+        _user=whisparr_srv_user,
+        _group=whisparr_srv_group,
+      ) }}"
+    whisparr__cfg: "{{ whisparr___app | r_pufky.data.v3(
+
+        _version=whisparr_srv_version,
+        _package='Whisparr.' ~ whisparr_srv_version[1:] ~ '.linux-x64.tar.gz',
+        _app='/opt/whisparr/src/' ~ whisparr_srv_version,
+        _url=(
+          whisparr___repo_url ~ whisparr_srv_version ~ '/' ~
+          'Whisparr.' ~ whisparr_srv_version[1:] ~ '.linux-x64.tar.gz'
+        ),
+        _dir=whisparr_cfg_dir | regex_replace('\\/$', ''),
+        _backup_dir=whisparr_cfg_backup_dir | regex_replace('\\/$', ''),
+        _backup_metadata=whisparr_cfg_backup_metadata,
+      ) }}"
+
+- name: 'Prep | assert | backup enabled and location defined'
+  when: whisparr_flg_backup
   ansible.builtin.assert:
     quiet: true
     that:
-      - _whisparr_cfg_database_host.raw | length > 0
-      - _whisparr_cfg_database_port.raw > 0
-      - _whisparr_cfg_database_user.raw | length > 0
-      - _whisparr_cfg_database_password.raw | length > 0
-      - _whisparr_cfg_database_main.raw | length > 0
-      - _whisparr_cfg_database_log.raw | length > 0
+      - whisparr__cfg._backup_dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │   whisparr_cfg_database_type=postgres requires all options set.   │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ whisparr_cfg_database_host: '{{ _whisparr_cfg_database_host.raw }}'
-      │ whisparr_cfg_database_port: '{{ _whisparr_cfg_database_port.raw }}'
-      │ whisparr_cfg_database_user: '{{ _whisparr_cfg_database_user.raw }}'
-      │ whisparr_cfg_database_password: '{{ _whisparr_cfg_database_password.raw }}'
-      │ whisparr_cfg_database_main: '{{ _whisparr_cfg_database_main.raw }}'
-      │ whisparr_cfg_database_log: '{{ _whisparr_cfg_database_log.raw }}'
-# yamllint enable rule:line-length
 
-- name: 'Prep | assert SSL requirements'
-  when: _whisparr_cfg_enable_ssl.raw
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      whisparr_flg_backup: {{ whisparr_flg_backup }}
+      whisparr_cfg_backup_dir: {{ whisparr__cfg._backup_dir }}
+
+- name: 'Prep | assert | restore enabled and location defined'
+  when: whisparr_flg_restore
   ansible.builtin.assert:
     quiet: true
     that:
-      - _whisparr_cfg_ssl_cert_path.raw | length > 0
+      - whisparr__cfg._backup_dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │                     SSL Requirements NOT met.                     │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ whisparr_cfg_enable_ssl=true requires:
-      │
-      │ whisparr_cfg_ssl_cert_path set
 
-- name: 'Prep | assert update script requirements'
-  when: not _whisparr_cfg_update_mechanism.raw
+      ✘ Backup location not set.
+      Backups enabled but no backup location defined.
+
+      whisparr_flg_restore: {{ whisparr_flg_restore }}
+      whisparr_cfg_backup_dir: {{ whisparr__cfg._backup_dir }}
+
+- name: 'Prep | assert | config enabled and source defined'
+  when: whisparr_flg_config
   ansible.builtin.assert:
     quiet: true
     that:
-      - _whisparr_cfg_update_script_path.raw | length > 0
+      - whisparr__cfg._dir | length > 0
     fail_msg: |
-      ╭───────────────────────────────────────────────────────────────────╮
-      │                                                                   │
-      │              Update mechanism requirements NOT met.               │
-      │                                                                   │
-      ├───────────────────────────────────────────────────────────────────╯
-      │ whisparr_cfg_update_mechanism=false requires:
-      │
-      │ whisparr_cfg_update_script_path set.
 
-- name: 'Prep | manage users'
-  when: _whisparr_srv_create_user.raw
-  ansible.builtin.include_role:
-    name: 'r_pufky.deb.users'
-    tasks_from: 'role_account_add.yml'
-  vars:
-    users_role_user: '{{ whisparr_role_user }}'
-    users_role_group: '{{ whisparr_role_group }}'
+      ✘ Config source not set.
+      Config source enabled but no config source defined.
 
-- name: 'Prep | enumerate system user {{ _whisparr_srv_user.raw }}'
+      whisparr_flg_config: {{ whisparr_flg_config }}
+      whisparr_cfg_dir: {{ whisparr__cfg._dir }}
+
+- name: '{{ "Prep | account | query user " ~ whisparr__srv._user }}'
+  ansible.builtin.command: '{{ "id " ~ whisparr__srv._user }}'
+  failed_when: false
+  register: whisparr__cfg_check
+  changed_when: whisparr__cfg_check.rc > 0
+
+- name: '{{ "Prep | account | query group " ~ whisparr__srv._group }}'
+  ansible.builtin.command: '{{ "groups " ~ whisparr__srv._group }}'
+  failed_when: false
+  register: whisparr__group_check
+  changed_when: whisparr__group_check.rc > 0
+
+- name: '{{ "Prep | account | create group " ~ whisparr__srv._group }}'
+  when: whisparr__group_check.rc != 0
+  ansible.builtin.group:
+    gid: '{{ whisparr___group.gid }}'
+    name: '{{ whisparr___group.name }}'
+    state: 'present'
+
+- name: '{{ "Prep | account | create user " ~ whisparr__srv._user }}'
+  when: whisparr__cfg_check.rc != 0
   ansible.builtin.user:
-    name: '{{ _whisparr_srv_user.raw }}'
+    name: '{{ whisparr___user.name }}'
+    group: '{{ whisparr___user.group }}'
+    uid: '{{ whisparr___user.uid }}'
+    shell: '{{ whisparr___user.shell }}'
+    home: '{{ whisparr___user.home }}'
+    create_home: '{{ whisparr___user.create_home }}'
+    password: '{{ whisparr___user.password }}'
+    password_lock: '{{ whisparr___user.password_lock }}'
+    update_password: '{{ whisparr___user.update_password }}'
+    expires: '{{ whisparr___user.expires }}'
+    system: '{{ whisparr___user.system }}'
+
+# Pre-existing users may have a different UID/GID/Home.
+- name: '{{ "Prep | account | enumerate " ~ whisparr__srv._user }}'
+  ansible.builtin.user:
+    name: '{{ whisparr__srv._user }}'
   check_mode: true
   changed_when: false
-  register: _whisparr_srv_user_query
+  register: whisparr__cfg_query
 
-- name: 'Prep | parse system user UID/GID'
+- name: 'Prep | fact | parse service UID/GID'
   ansible.builtin.set_fact:
-    _whisparr_srv_user: '{{
-        _whisparr_srv_user |
-        combine({"_uid": _whisparr_srv_user_query.uid})
-      }}'
-    _whisparr_srv_group: '{{
-        _whisparr_srv_group |
-        combine({"_gid": _whisparr_srv_user_query.group})
-      }}'
+    whisparr__cfg: "{{ whisparr__cfg | r_pufky.data.v3(
 
-- name: 'Prep | stop services'
+        _uid=whisparr__cfg_query.uid,
+        _gid=whisparr__cfg_query.group,
+      ) }}"
+
+- name: 'Prep | systemd | stop whisparr.service'
   ansible.builtin.systemd:
-    name: '{{ item }}'
+    name: 'whisparr.service'
     state: 'stopped'
   failed_when: false
-  loop:
-    - 'whisparr.service'

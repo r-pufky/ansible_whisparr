@@ -3,6 +3,24 @@
   hosts: 'all'
   gather_facts: false
   tasks:
-    - name: 'Converge | apply r_pufky.arr.whisparr'
+    # Inject config.xml and reset DBs; config.xml tested after restore.
+    - name: 'Converge | role | r_pufky.arr.whisparr (pre-configured config.xml)'
       ansible.builtin.include_role:
         name: 'r_pufky.arr.whisparr'
+      vars:
+        whisparr_flg_config: true
+        whisparr_cfg_dir: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default"
+          }}'
+
+    - name: 'Converge | role | r_pufky.arr.whisparr (create db backup)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.whisparr'
+      vars:
+        whisparr_flg_backup: true
+
+    - name: 'Converge | role | r_pufky.arr.whisparr (restore)'
+      ansible.builtin.include_role:
+        name: 'r_pufky.arr.whisparr'
+      vars:
+        whisparr_flg_restore: true

@@ -1,0 +1,63 @@
+---
+###############################################################################
+# Backup
+###############################################################################
+# Only backup SQLite databases and configuration file.
+
+- name: 'Backup | fact | parse location'
+  ansible.builtin.set_fact:
+    whisparr__archive:
+      '{{ "/tmp/" ~ whisparr__srv._start ~ "_config.tar.xz" }}'
+
+- name: 'Backup | warning | ⚠ Metadata Enabled ⚠'
+  when: whisparr__cfg._backup_metadata
+  ansible.builtin.debug:
+    msg: |
+
+      ⚠ Metadata Enabled ⚠
+
+      /var/opt/whisparr/MediaCover may be Multi-GB. A backup effectively
+      doubles the space used during the process and may fail if low disk space.
+
+      Transfer may be very long.
+
+
+- name: 'Backup | filesystem | set backup location'
+  when: >
+      whisparr__cfg._backup_dir | length > 0 and
+      whisparr__cfg._backup_dir != '/tmp'
+  delegate_to: 'localhost'
+  run_once: true
+  ansible.builtin.file:
+    path: '{{ whisparr__cfg._backup_dir }}'
+    mode: '0750'
+    state: directory
+
+- name: '{{  "Backup | cmd | create " ~ whisparr__archive }}'
+  ansible.builtin.shell: '{{
+      "/usr/bin/tar " ~
+      ("--exclude=MediaCover" if not whisparr__cfg._backup_metadata else "") ~
+      " -cvJf " ~ whisparr__archive ~ " ."
+    }}'
+  args:
+    executable: '/bin/bash'
+    chdir: '{{ whisparr__cfg._var_dir }}'
+  changed_when: true
+
+- name:
+    '{{ "Backup | fetch | " ~ whisparr__archive }}'
+  ansible.posix.synchronize:
+    mode: pull
+    src: '{{ whisparr__archive }}'
+    dest: '{{ whisparr__cfg._backup_dir ~ "/" }}'
+
+- name: 'Backup | filesystem | cleanup'
+  ansible.builtin.file:
+    path: '{{ "/tmp/" ~ whisparr__srv._start ~ "_config.tar.xz" }}'
+    state: 'absent'
+
+- name: 'Backup | start'
+  ansible.builtin.import_tasks: 'start.yml'
+
+- name: 'Backup | success ✔'
+  ansible.builtin.meta: 'end_host'

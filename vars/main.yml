@@ -3,46 +3,44 @@
 ###############################################################################
 # Whisparr Role Options
 ###############################################################################
-# Whisparr uses the generic Servarr installation scripts.
-#
-# The latest 'version' can determined from running the default test instance
-# and checking system > updates or download the latest binary:
-#
-#   wget --content-disposition 'http://whisparr.servarr.com/v1/update/nightly/updatefile?os=linux&runtime=netcore&arch=x64'
+# Whisparr uses generic Servarr installation scripts.
 #
 # Updates:
 # * Branch for new Debian releases.
 # * KEEP a separate change log as changes are made.
 # * Use bare-metal docs to validate package/process changes.
-# * Update role defaults (includes updating defaults, tasks):
-#   * Use configuration docs to add new variables.
-#   * Use defaults to remove any changed/deprecated variables.
+# * Update defaults.
 # * Update tests for any changes.
-#   * Use BARE VERSION for find and replace to set new version.
-# * Standard role validation testing (yamllint, ansible-lint, to-do, no-qa).
-# * Tag with OS-APP-ROLE version.
+# * Standard validation testing (yamllint, ansible-lint, to-do, no-qa).
 #
 # Reference:
 # * https://github.com/Servarr/Wiki/blob/master/servarr
 # * https://github.com/Whisparr/Whisparr/releases
+# * https://github.com/Servarr/Wiki/blob/master/servarr/servarr-install-script.sh
 # yamllint enable rule:line-length
 
-# Last time Whisparr options were validated against a default configuration.
-whisparr_role_validate_date: '2025-08-25'
-whisparr_role_validate_release: 'trixie'
-whisparr_role_validate_version: 'v2.0.0.1250'
-whisparr_role_validate_script_release: '3.0.12'
-whisparr_role_validate_script_date: '2024-04-09'
+whisparr___release: "{{ {} | r_pufky.data.v3(
+
+    _date='2026-03-23',
+    _debian='trixie',
+    _app='v2.2.0-release.108',
+    _script_release='3.0.12',
+    _script_date='2024-04-09',
+  ) }}"
 
 ###############################################################################
 # APT Packages
 ###############################################################################
 
-whisparr_role_packages:
+whisparr___packages:
   - 'sqlite3'  # Whisparr DB.
   - 'gnupg2'  # GPG for certificates.
   - 'ca-certificates'  # Up to date certificates for certificate validation.
   - 'libicu76'  # International Unicode support for .NET.
+
+  # Ansible.
+  - 'xz-utils'  # xz archives.
+  - 'rsync'  # ansible.posix.synchronize.
 
 ###############################################################################
 # Whisparr GitHub Options
@@ -50,36 +48,36 @@ whisparr_role_packages:
 # Reference:
 # * https://github.com/Whisparr/Whisparr/releases/latest
 
-whisparr_role_repo_release_owner: 'Whisparr'
-whisparr_role_repo_release_repo: 'Whisparr'
-whisparr_role_repo_extract_dir: '/opt/whisparr'
-whisparr_role_repo_extract_symlink: '/opt/whisparr/whisparr'
-whisparr_role_repo_release_specifier: 'v'
-whisparr_role_repo_release_asset:
-  'Whisparr.develop.2.0.0.1250.linux-core-x64.tar.gz'
-# whisparr_role_repo_release_asset:
-#   'Whisparr.nightly.{BARE_VERSION}.linux-core-x64.tar.gz'
-whisparr_role_repo_release_asset_static_url: '{{
-    "https://whisparr.servarr.com/v1/update/nightly/" ~
-    "updatefile?os=linux&runtime=netcore&arch=x64"
-  }}'
-whisparr_role_repo_extract_migrate_files:
-  - 'whisparr2.db'
-  - 'whisparr2.db-shm'  # Whisparr never closes DB's correctly.
-  - 'whisparr2.db-wal'
-  - 'logs.db'
-  - 'logs.db-shm'
-  - 'logs.db-wal'
+whisparr___repo_url:
+  'https://github.com/Whisparr/Whisparr/releases/download/'
+whisparr___package:
+  '{{ "Whisparr." ~ whisparr___release._app [1:] ~ ".linux-x64.tar.gz" }}'
+
+whisparr___app: "{{ {} | r_pufky.data.v3(
+
+    _version=whisparr___release._app,
+    _package=whisparr___package,
+    _var_dir='/var/opt/whisparr',
+    _cfg='/var/opt/whisparr/config.xml',
+    _opt_dir='/opt/whisparr',
+    _src_dir='/opt/whisparr/src',
+    _app='/opt/whisparr/src/' ~ whisparr___release._app,
+    _service='/etc/systemd/system/whisparr.service',
+    _base_url=whisparr___repo_url,
+    _url=(
+      whisparr___repo_url ~ whisparr___release._app ~ '/' ~ whisparr___package
+    ),
+  ) }}"
 
 ###############################################################################
 # Default Whisparr User/Group
 ###############################################################################
 
-whisparr_role_group:
+whisparr___group:
   name: 'media'
   gid: 5555
 
-whisparr_role_user:
+whisparr___user:
   name: 'media'
   group: 'media'
   uid: 5555

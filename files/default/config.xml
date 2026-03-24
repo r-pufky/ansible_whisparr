@@ -1,0 +1,24 @@
+<Config>
+  <WhisparrMetadata>https://api.whisparr.com/v3/{route}</WhisparrMetadata>
+  <GithubOwnerRepo>whisparr/whisparr</GithubOwnerRepo>
+  <BindAddress>*</BindAddress>
+  <Port>6969</Port>
+  <SslPort>8008</SslPort>
+  <EnableSsl>False</EnableSsl>
+  <LaunchBrowser>False</LaunchBrowser>
+  <ApiKey>abcdef1234567890abcdef1234567890</ApiKey>
+  <AuthenticationMethod>None</AuthenticationMethod>
+  <AuthenticationRequired>Enabled</AuthenticationRequired>
+  <Branch>nightly</Branch>
+  <LogLevel>info</LogLevel>
+  <LogSizeLimit>1</LogSizeLimit>
+  <SslCertPath></SslCertPath>
+  <SslCertPassword></SslCertPassword>
+  <UrlBase></UrlBase>
+  <InstanceName>Whisparr</InstanceName>
+  <AnalyticsEnabled>False</AnalyticsEnabled>
+  <UpdateAutomatically>False</UpdateAutomatically>
+  <UpdateMechanism>BuiltIn</UpdateMechanism>
+  <UpdateScriptPath></UpdateScriptPath>
+  <Theme>auto</Theme>
+</Config>

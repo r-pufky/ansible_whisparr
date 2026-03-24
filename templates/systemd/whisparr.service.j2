@@ -1,0 +1,16 @@
+[Unit]
+Description=Whisparr Daemon.
+After=network.target
+
+[Service]
+Type=simple
+ExecStart={{ whisparr__cfg._app ~ "/Whisparr" }} -nobrowser -data={{ whisparr__cfg._var_dir }}
+TimeoutStopSec=20
+Restart=always
+User={{ whisparr__srv._user }}
+Group={{ whisparr__srv._group }}
+UMask=0002
+KillMode=process
+
+[Install]
+WantedBy=multi-user.target

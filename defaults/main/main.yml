@@ -27,7 +27,7 @@ whisparr_flg_restore: false
 # Default: True.
 whisparr_flg_maintenance: true
 
-# 1. Install application?
+# 4. Install application?
 #
 # Creates required default directories, users, install packages, download
 # software, autogenerates config.xml if not specified, update and start
@@ -36,7 +36,7 @@ whisparr_flg_maintenance: true
 # Default: True.
 whisparr_flg_install: true
 
-# 2. Set configuration data?
+# 5. Set configuration data?
 #
 # Overwrite config data directory sourced from whisparr_cfg_dir. Use backup and
 # restore to manage configuration data. Stops service, deploys user config

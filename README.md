@@ -45,7 +45,7 @@ Tasks are gated by feature flags and executed in the following order.
   2    | whisparr_flg_restore     | Restore config data. Exits role.
   3    | whisparr_flg_maintenance | Preform role maintenance tasks.
   4    | whisparr_flg_install     | Install required packages, users, etc.
-  4    | whisparr_flg_config      | Install user-defined config.
+  5    | whisparr_flg_config      | Install user-defined config.
 
 ### Example Playbooks
 Whisparr will automatically generate a configuration file if one is not

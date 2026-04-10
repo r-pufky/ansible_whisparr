@@ -20,13 +20,13 @@
 
         _version=whisparr_srv_version,
         _package='Whisparr.' ~ whisparr_srv_version[1:] ~ '.linux-x64.tar.gz',
-        _app='/opt/whisparr/src/' ~ whisparr_srv_version,
+        _app_d='/opt/whisparr/src/' ~ whisparr_srv_version,
         _url=(
           whisparr___repo_url ~ whisparr_srv_version ~ '/' ~
           'Whisparr.' ~ whisparr_srv_version[1:] ~ '.linux-x64.tar.gz'
         ),
-        _dir=whisparr_cfg_dir | regex_replace('\\/$', ''),
-        _backup_dir=whisparr_cfg_backup_dir | regex_replace('\\/$', ''),
+        _d=whisparr_cfg_d | regex_replace('\\/$', ''),
+        _backup_d=whisparr_cfg_backup_d | regex_replace('\\/$', ''),
         _backup_metadata=whisparr_cfg_backup_metadata,
       ) }}"
 
@@ -35,42 +35,42 @@
   ansible.builtin.assert:
     quiet: true
     that:
-      - whisparr__cfg._backup_dir | length > 0
+      - whisparr__cfg._backup_d | length > 0
     fail_msg: |
 
       ✘ Backup location not set.
       Backups enabled but no backup location defined.
 
       whisparr_flg_backup: {{ whisparr_flg_backup }}
-      whisparr_cfg_backup_dir: {{ whisparr__cfg._backup_dir }}
+      whisparr_cfg_backup_d: {{ whisparr__cfg._backup_d }}
 
 - name: 'Prep | assert | restore enabled and location defined'
   when: whisparr_flg_restore
   ansible.builtin.assert:
     quiet: true
     that:
-      - whisparr__cfg._backup_dir | length > 0
+      - whisparr__cfg._backup_d | length > 0
     fail_msg: |
 
       ✘ Backup location not set.
       Backups enabled but no backup location defined.
 
       whisparr_flg_restore: {{ whisparr_flg_restore }}
-      whisparr_cfg_backup_dir: {{ whisparr__cfg._backup_dir }}
+      whisparr_cfg_backup_d: {{ whisparr__cfg._backup_d }}
 
 - name: 'Prep | assert | config enabled and source defined'
   when: whisparr_flg_config
   ansible.builtin.assert:
     quiet: true
     that:
-      - whisparr__cfg._dir | length > 0
+      - whisparr__cfg._d | length > 0
     fail_msg: |
 
       ✘ Config source not set.
       Config source enabled but no config source defined.
 
       whisparr_flg_config: {{ whisparr_flg_config }}
-      whisparr_cfg_dir: {{ whisparr__cfg._dir }}
+      whisparr_cfg_d: {{ whisparr__cfg._d }}
 
 - name: '{{ "Prep | account | query user " ~ whisparr__srv._user }}'
   ansible.builtin.command: '{{ "id " ~ whisparr__srv._user }}'

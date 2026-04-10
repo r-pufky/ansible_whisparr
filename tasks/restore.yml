@@ -10,7 +10,7 @@
 - name: 'Restore | filesystem | enumerate all backups'
   delegate_to: 'localhost'
   ansible.builtin.find:
-    paths: '{{ whisparr__cfg._backup_dir }}'
+    paths: '{{ whisparr__cfg._backup_d }}'
     patterns: '*.tar.xz'
     file_type: 'file'
     recurse: false
@@ -40,7 +40,7 @@
   ansible.builtin.command: '{{
       "/usr/bin/tar -xJpf " ~
       "/tmp/" ~ whisparr__restore_archive | basename ~
-      " -C " ~ whisparr__cfg._var_dir ~ " --overwrite"
+      " -C " ~ whisparr___app._var_d ~ " --overwrite"
     }}'
   changed_when: true
 

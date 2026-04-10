@@ -70,7 +70,7 @@ DB's, etc. Existing installs likely want to use **backup** and **restore**.
     name: 'r_pufky.arr.whisparr'
   vars:
     whisparr_flg_config: true
-    whisparr_cfg_dir: 'host_vars/whisparr.example.com/data'
+    whisparr_cfg_d: 'host_vars/whisparr.example.com/data'
 ```
 
 #### Dynamic Deployments
@@ -90,14 +90,14 @@ or leave whisparr_flg_config disabled to leave existing config untouched.
     name: 'r_pufky.arr.whisparr'
   vars:
     whisparr_flg_backup: true
-    whisparr_cfg_backup_dir: '/tmp'
+    whisparr_cfg_backup_d: '/tmp'
 
 - name: 'Restore from backup.'
   ansible.builtin.include_role:
     name: 'r_pufky.arr.whisparr'
   vars:
     whisparr_flg_restore: true
-    whisparr_cfg_backup_dir: '/tmp'
+    whisparr_cfg_backup_d: '/tmp'
 ```
 
 ## Development
@@ -107,6 +107,12 @@ Configure [environment][a].
 # Run all tests.
 molecule test --all
 ```
+
+Testing variables:
+
+  Variable            | Type | Description
+ ---------------------|------|-------------
+  molecule_flg_inject | bool | Disable **get_url** to inject files locally.
 
 ### [Releases][b]
 
@@ -143,7 +149,7 @@ PGP: [466EEC2B67516C7117C85CE3A0BC35D16698BAB9][d] | [github gist][e]
 [j]: https://github.com/r-pufky/ansible_whisparr/tree/main/defaults/main/main.yml
 [k]: https://github.com/r-pufky/ansible_whisparr/blob/main/defaults/main/ports.yml
 [l]: https://wiki.servarr.com/en/whisparr/postgres-setup
-[m]: https://github.com/r-pufky/ansible_whisparr/blob/main/files/postgres/config.xml
-[n]: https://github.com/r-pufky/ansible_whisparr/blob/main/files/
+[m]: https://github.com/r-pufky/ansible_whisparr/blob/main/templates/postgres/config.xml
+[n]: https://github.com/r-pufky/ansible_whisparr/blob/main/templates/
 [o]: https://whisparr.com
 [p]: https://wiki.servarr.com/whisparr/faq#help-i-have-locked-myself-out

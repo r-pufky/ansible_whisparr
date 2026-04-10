@@ -57,10 +57,9 @@ whisparr___app: "{{ {} | r_pufky.data.v3(
 
     _version=whisparr___release._app,
     _package=whisparr___package,
-    _var_dir='/var/opt/whisparr',
-    _cfg='/var/opt/whisparr/config.xml',
-    _opt_dir='/opt/whisparr',
-    _src_dir='/opt/whisparr/src',
+    _var_d='/var/opt/whisparr',
+    _config_xml='/var/opt/whisparr/config.xml',
+    _src_d='/opt/whisparr/src',
     _app='/opt/whisparr/src/' ~ whisparr___release._app,
     _service='/etc/systemd/system/whisparr.service',
     _base_url=whisparr___repo_url,

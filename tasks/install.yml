@@ -19,23 +19,19 @@
 
 - name: 'Install | filesystem | set system directories'
   ansible.builtin.file:
-    path: '{{ item }}'
+    path: '{{ whisparr___app._src_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
     state: 'directory'
-  loop:
-    - '{{ whisparr___app._src_dir }}'
 
 - name: 'Install | filesystem | set service directories'
   ansible.builtin.file:
-    path: '{{ item }}'
+    path: '{{ whisparr___app._var_d }}'
     owner: '{{ whisparr__srv._user }}'
     group: '{{ whisparr__srv._group }}'
     mode: '0755'
     state: 'directory'
-  loop:
-    - '{{ whisparr___app._var_dir }}'
 
 - name: 'Install | packages'
   ansible.builtin.include_role:
@@ -47,7 +43,7 @@
 
 - name: 'Install | filesystem | find previous installations'
   ansible.builtin.find:
-    paths: '{{ whisparr__cfg._src_dir }}'
+    paths: '{{ whisparr___app._src_d }}'
     file_type: 'directory'
     recurse: false
     excludes:
@@ -63,7 +59,7 @@
     label: '{{ item.path }}'
 
 - name: 'Install | url | 🗘 Whisparr (~1 minute) 🗘'
-  when: not (url_inject_enable | default(false))
+  when: not (molecule_flg_inject | default(false))
   ansible.builtin.get_url:
     url: '{{ whisparr__cfg._url }}'
     dest: '{{ "/tmp/" ~ whisparr__cfg._package }}'
@@ -76,9 +72,9 @@
   register: whisparr__cmd
   until: whisparr__cmd is succeeded
 
-- name: '{{ "Install | filesystem | set " ~ whisparr__cfg._app }}'
+- name: '{{ "Install | filesystem | set " ~ whisparr__cfg._app_d }}'
   ansible.builtin.file:
-    path: '{{ whisparr__cfg._app }}'
+    path: '{{ whisparr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: '0755'
@@ -86,19 +82,19 @@
 
 - name: 'Install | filesystem | unpack Whisparr'
   ansible.builtin.unarchive:
-    creates: '{{ whisparr__cfg._app ~ "/Whisparr" }}'
+    creates: '{{ whisparr__cfg._app_d ~ "/Whisparr" }}'
     src: '{{ "/tmp/" ~ whisparr__cfg._package }}'
     remote_src: true
-    dest: '{{ whisparr__cfg._app }}'
+    dest: '{{ whisparr__cfg._app_d }}'
     owner: 'root'
     group: 'root'
     mode: 'a-st'
     extra_opts: ['--strip-components=1']
 
-- name: '{{ "Install | filesystem | set " ~ whisparr__cfg._service }}'
+- name: '{{ "Install | filesystem | set " ~ whisparr___app._service }}'
   ansible.builtin.template:
     src: 'systemd/whisparr.service.j2'
-    dest: '{{ whisparr__cfg._service }}'
+    dest: '{{ whisparr___app._service }}'
     owner: 'root'
     group: 'root'
     mode: '0644'

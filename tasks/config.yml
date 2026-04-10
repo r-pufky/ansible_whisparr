@@ -9,33 +9,50 @@
 # large metadata downloads on new version if not migrated with databases.
 # Exclude from removal during configuration sync.
 
-- name: 'Config | filetree | deploy managed files'
+- name: 'Config | filetree | set managed directories'
+  ansible.builtin.file:
+    path: '{{ whisparr___app._var_d ~ "/" ~ item.path }}'
+    owner: '{{ whisparr__srv._user }}'
+    group: '{{ whisparr__srv._group }}'
+    mode: '0750'
+    state: 'directory'
+  loop: '{{ query("community.general.filetree", whisparr__cfg._d) }}'
+  loop_control:
+    label: '{{ item.path }}'
+  when: item.state == 'directory'
+
+- name: 'Config | filetree | set managed files'
   ansible.builtin.template:
     src: '{{ item.src }}'
-    dest: '{{ whisparr__cfg._var_dir ~ "/" ~ item.path }}'
+    dest: '{{ whisparr___app._var_d ~ "/" ~ item.path }}'
     owner: '{{ whisparr__srv._user }}'
     group: '{{ whisparr__srv._group }}'
     mode: '0640'
-  loop: '{{ query("community.general.filetree", whisparr__cfg._dir) }}'
+  loop: '{{ query("community.general.filetree", whisparr__cfg._d) }}'
   loop_control:
     label: '{{ item.path }}'
   when: item.state == 'file'
-  register: whisparr__local
 
 - name: 'Config | filesystem | query remote files'
   ansible.builtin.find:
-    paths: '{{ whisparr__cfg._var_dir }}'
-    file_type: 'file'
+    paths: '{{ whisparr___app._var_d }}'
+    file_type: 'any'
+    hidden: true
     recurse: true
     excludes: 'MediaCover'  # Ignore MediaCover to prevent metadata deletion.
   register: whisparr__remote
 
-- name: 'Config | filesystem | remove unmanaged files'
+- name: 'Config | filetree | remove unmanaged files and directories'
   ansible.builtin.file:
     path: '{{ item.path }}'
     state: 'absent'
-  loop: '{{ whisparr__remote.files }}'
+  loop: '{{ whisparr__remote.files | sort(attribute="path", reverse=true) }}'
   loop_control:
     label: '{{ item.path }}'
   when: >
-    item.path not in whisparr__local.results | map(attribute='dest') | list
+    item.path not in
+    (
+      query("community.general.filetree", whisparr__cfg._d) |
+      map(attribute='path') |
+      map('regex_replace', '^', whisparr___app._var_d ~ "/") | list
+    )

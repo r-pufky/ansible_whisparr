@@ -11,8 +11,8 @@
         name: 'r_pufky.arr.whisparr'
       vars:
         whisparr_flg_config: true
-        whisparr_cfg_dir: '{{
-            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/files/default"
+        whisparr_cfg_d: '{{
+            lookup("env", "MOLECULE_PROJECT_DIRECTORY") ~ "/templates/default"
           }}'
 
     - name: 'Converge | role | r_pufky.arr.whisparr (create db backup)'

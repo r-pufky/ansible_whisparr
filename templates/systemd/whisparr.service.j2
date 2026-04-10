@@ -4,7 +4,7 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart={{ whisparr__cfg._app ~ "/Whisparr" }} -nobrowser -data={{ whisparr__cfg._var_dir }}
+ExecStart={{ whisparr__cfg._app_d ~ "/Whisparr" }} -nobrowser -data={{ whisparr___app._var_d }}
 TimeoutStopSec=20
 Restart=always
 User={{ whisparr__srv._user }}

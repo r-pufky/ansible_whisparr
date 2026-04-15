@@ -9,12 +9,12 @@
     whisparr__archive:
       '{{ "/tmp/" ~ whisparr__srv._start ~ "_config.tar.xz" }}'
 
-- name: 'Backup | warning | ⚠ Metadata Enabled ⚠'
+- name: 'Backup | warning | 🛆 Metadata Enabled 🛆'
   when: whisparr__cfg._backup_metadata
   ansible.builtin.debug:
     msg: |
 
-      ⚠ Metadata Enabled ⚠
+      🛆 Metadata Enabled 🛆
 
       /var/opt/whisparr/MediaCover may be Multi-GB. A backup effectively
       doubles the space used during the process and may fail if low disk space.

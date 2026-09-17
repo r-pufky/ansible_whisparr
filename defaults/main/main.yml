@@ -60,11 +60,11 @@ whisparr_flg_config: false
 #       PATCH: Safe - Usually requires no role updates.
 #   RECOMMEND: Only increment MINOR.PATCH.
 #
-# Default: 'v2.2.0-release.108'.
+# Default: 'v2.2.0-release.231'.
 #
 # Reference:
 # * https://github.com/Whisparr/Whisparr/releases/latest
-whisparr_srv_version: 'v2.2.0-release.108'
+whisparr_srv_version: 'v2.2.0-release.231'
 
 # Github access token (whisparr).
 #
